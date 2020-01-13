@@ -6199,13 +6199,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    'downloadButton.fontSize': '12px',
 
 	    // main icons
-	    'menu.normalIcon.path': '../../svg/icon-d.svg',
+	    'menu.normalIcon.path': 'icon-d.svg',
 	    'menu.normalIcon.name': 'icon-d',
-	    'menu.activeIcon.path': '../../svg/icon-b.svg',
+	    'menu.activeIcon.path': 'icon-b.svg',
 	    'menu.activeIcon.name': 'icon-b',
-	    'menu.disabledIcon.path': '../../svg/icon-a.svg',
+	    'menu.disabledIcon.path': 'icon-a.svg',
 	    'menu.disabledIcon.name': 'icon-a',
-	    'menu.hoverIcon.path': '../../svg/icon-c.svg',
+	    'menu.hoverIcon.path': 'icon-c.svg',
 	    'menu.hoverIcon.name': 'icon-c',
 	    'menu.iconSize.width': '24px',
 	    'menu.iconSize.height': '24px',
@@ -6215,9 +6215,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    'submenu.partition.color': '#3c3c3c',
 
 	    // submenu icons
-	    'submenu.normalIcon.path': '../../svg/icon-d.svg',
+	    'submenu.normalIcon.path': 'icon-d.svg',
 	    'submenu.normalIcon.name': 'icon-d',
-	    'submenu.activeIcon.path': '../../svg/icon-c.svg',
+	    'submenu.activeIcon.path': 'icon-c.svg',
 	    'submenu.activeIcon.name': 'icon-c',
 	    'submenu.iconSize.width': '32px',
 	    'submenu.iconSize.height': '32px',
