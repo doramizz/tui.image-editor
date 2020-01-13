@@ -68,15 +68,52 @@ export default ({locale}) => (`
                     <div class="tie-removewhite-distance-range"></div>
                 </div>
             </div>
-            <div class="tui-image-editor-checkbox-group tui-image-editor-disabled">
-                <div class="tui-image-editor-checkbox">
-                    <label>
-                        <input type="checkbox" class="tie-brightness">
+            <div class="tui-image-editor-checkbox-group">
+                <div class="tui-image-editor-checkbox-wrap">
+                    <div class="tui-image-editor-checkbox">
+                        <label>
+                            <input type="checkbox" class="tie-brightness" checked>
+                            <span>${locale.localize('Brightness')}</span>
+                        </label>
                         <span>${locale.localize('Brightness')}</span>
-                    </label>
+                    </div>
                 </div>
-                <div class="tui-image-editor-range-wrap short">
+                <div class="tui-image-editor-newline tui-image-editor-range-wrap short">
+                    <label></label>
                     <div class="tie-brightness-range"></div>
+                    <input class="tie-brightness-range-value tui-image-editor-range-value" value="0" />
+                </div>
+            </div>
+            <div class="tui-image-editor-checkbox-group">
+                <div class="tui-image-editor-checkbox-wrap">
+                    <div class="tui-image-editor-checkbox">
+                        <label>
+                            <input type="checkbox" class="tie-contrast" checked>
+                            <span>${locale.localize('Contrast')}</span>
+                        </label>
+                        <span>${locale.localize('Contrast')}</span>
+                    </div>
+                </div>
+                <div class="tui-image-editor-newline tui-image-editor-range-wrap short">
+                    <label></label>
+                    <div class="tie-contrast-range"></div>
+                    <input class="tie-contrast-range-value tui-image-editor-range-value" value="0" />
+                </div>
+            </div>
+            <div class="tui-image-editor-checkbox-group">
+                <div class="tui-image-editor-checkbox-wrap">
+                    <div class="tui-image-editor-checkbox">
+                        <label>
+                            <input type="checkbox" class="tie-saturation" checked>
+                            <span>${locale.localize('Saturation')}</span>
+                        </label>
+                        <span>${locale.localize('Saturation')}</span>
+                    </div>
+                </div>
+                <div class="tui-image-editor-newline tui-image-editor-range-wrap short">
+                    <label></label>
+                    <div class="tie-saturation-range"></div>
+                    <input class="tie-saturation-range-value tui-image-editor-range-value" value="0" />
                 </div>
             </div>
             <div class="tui-image-editor-checkbox-group tui-image-editor-disabled">

@@ -174,8 +174,8 @@ module.exports = {
     defaultTextRangeValus: {
         realTimeEvent: true,
         min: 10,
-        max: 100,
-        value: 50
+        max: 200,
+        value: 100
     },
 
     defaultFilterRangeValus: {
@@ -192,7 +192,20 @@ module.exports = {
         brightnessRange: {
             min: -1,
             max: 1,
-            value: 0
+            value: 0,
+            realTimeEvent: true
+        },
+        contrastRange: {
+            min: -1,
+            max: 1,
+            value: 0,
+            realTimeEvent: true
+        },
+        saturationRange: {
+            min: -1,
+            max: 1,
+            value: 0,
+            realTimeEvent: true
         },
         noiseRange: {
             min: 0,

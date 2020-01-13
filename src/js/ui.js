@@ -64,6 +64,7 @@ class Ui {
         this._makeUiElement(element);
         this._setUiSize();
         this._initMenuEvent = false;
+        this._setTooltip(this._menuElement.querySelector('.tie-btn-reset'));
 
         this._els = {
             'undo': this._menuElement.querySelector('.tie-btn-undo'),
@@ -111,6 +112,7 @@ class Ui {
      *     @param {Number} resizeInfo.imageSize.oldHeight - old height
      *     @param {Number} resizeInfo.imageSize.newWidth - new width
      *     @param {Number} resizeInfo.imageSize.newHeight - new height
+     * @returns {Promise}
      * @example
      * // Change the image size and ui size, and change the affected ui state together.
      * imageEditor.ui.resizeEditor({
@@ -122,34 +124,38 @@ class Ui {
      * imageEditor.ui.resizeEditor();
      */
     resizeEditor({uiSize, imageSize = this.imageSize} = {}) {
-        if (imageSize !== this.imageSize) {
-            this.imageSize = imageSize;
-        }
-        if (uiSize) {
-            this._setUiSize(uiSize);
-        }
+        return new Promise(resolve => {
+            if (imageSize !== this.imageSize) {
+                this.imageSize = imageSize;
+            }
+            if (uiSize) {
+                this._setUiSize(uiSize);
+            }
 
-        const {width, height} = this._getEditorDimension();
-        const editorElementStyle = this._editorElement.style;
-        const {menuBarPosition} = this.options;
+            const {width, height} = this._getEditorDimension();
+            const editorElementStyle = this._editorElement.style;
+            const {menuBarPosition} = this.options;
 
-        editorElementStyle.height = `${height}px`;
-        editorElementStyle.width = `${width}px`;
+            editorElementStyle.height = `${height}px`;
+            editorElementStyle.width = `${width}px`;
 
-        this._setEditorPosition(menuBarPosition);
+            this._setEditorPosition(menuBarPosition);
 
-        this._editorElementWrap.style.bottom = `0px`;
-        this._editorElementWrap.style.top = `0px`;
-        this._editorElementWrap.style.left = `0px`;
-        this._editorElementWrap.style.width = `100%`;
+            this._editorElementWrap.style.bottom = `0px`;
+            this._editorElementWrap.style.top = `0px`;
+            this._editorElementWrap.style.left = `0px`;
+            this._editorElementWrap.style.width = `100%`;
 
-        const selectElementClassList = this._selectedElement.classList;
+            const selectElementClassList = this._selectedElement.classList;
 
-        if (menuBarPosition === 'top' && this._selectedElement.offsetWidth < BI_EXPRESSION_MINSIZE_WHEN_TOP_POSITION) {
-            selectElementClassList.add('tui-image-editor-top-optimization');
-        } else {
-            selectElementClassList.remove('tui-image-editor-top-optimization');
-        }
+            if (menuBarPosition === 'top' && this._selectedElement.offsetWidth < BI_EXPRESSION_MINSIZE_WHEN_TOP_POSITION) {
+                selectElementClassList.add('tui-image-editor-top-optimization');
+            } else {
+                selectElementClassList.remove('tui-image-editor-top-optimization');
+            }
+
+            resolve();
+        });
     }
 
     /**
@@ -443,13 +449,15 @@ class Ui {
 
     /**
      * Init canvas
+     * @param {function} callback - init loading callback function
      * @ignore
      */
-    initCanvas() {
+    initCanvas(callback) {
         const loadImageInfo = this._getLoadImage();
         if (loadImageInfo.path) {
             this._actions.main.initLoadImage(loadImageInfo.path, loadImageInfo.name).then(() => {
                 this.activeMenuEvent();
+                callback();
             });
         }
 
@@ -595,6 +603,15 @@ class Ui {
         }
         editorElementStyle.top = `${top}px`;
         editorElementStyle.left = `${left}px`;
+    }
+
+    /**
+     * Set tooltip for RESET button
+     * @param {Obejct} element - DOM element
+     * @private
+     */
+    _setTooltip(element) {
+        element.setAttribute('tooltip-content', this._locale.localize('Reset'.replace(/^[a-z]/g, $0 => $0.toUpperCase())));
     }
 }
 

@@ -78,6 +78,8 @@ class ImageEditor {
             usageStatistics: true
         }, options);
 
+        this.options = options;
+
         this.mode = null;
 
         this.activeObjectId = null;
@@ -151,7 +153,7 @@ class ImageEditor {
         }
 
         if (this.ui) {
-            this.ui.initCanvas();
+            this.ui.initCanvas(options.onLoad);
             this.setReAction();
         }
         fabric.enableGLFiltering = false;
@@ -683,6 +685,7 @@ class ImageEditor {
      * imageEditor.crop(imageEditor.getCropzoneRect());
      */
     crop(rect) {
+        this.options.onCropStart();
         const data = this._graphics.getCroppedImageData(rect);
         if (!data) {
             return Promise.reject(rejectMessages.invalidParameters);

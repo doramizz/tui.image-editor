@@ -79,7 +79,7 @@ module.exports = {
         historyApiFallback: false,
         progress: true,
         inline: true,
-        host: '0.0.0.0',
+        host: '127.0.0.1',
         disableHostCheck: true
     }
 };

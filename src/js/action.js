@@ -46,6 +46,9 @@ export default {
 
             return result;
         };
+        const resetFilterValue = () => {
+            this.ui.filter.resetRangeValue();
+        };
 
         return extend({
             initLoadImage: (imagePath, imageName) => (
@@ -70,9 +73,12 @@ export default {
             },
             reset: () => {
                 exitCropOnAction();
+                resetFilterValue();
                 this.loadImageFromURL(this.ui.initializeImgUrl, 'resetImage').then(sizeValue => {
                     exitCropOnAction();
-                    this.ui.resizeEditor({imageSize: sizeValue});
+                    this.ui.resizeEditor({imageSize: sizeValue}).then(() => {
+                        this.options.onReset();
+                    });
                     this.clearUndoStack();
                 });
             },
@@ -321,9 +327,11 @@ export default {
                 const cropRect = this.getCropzoneRect();
                 if (cropRect) {
                     this.crop(cropRect).then(() => {
-                        this.stopDrawingMode();
-                        this.ui.resizeEditor();
                         this.ui.changeMenu('crop');
+                        this.stopDrawingMode();
+                        this.ui.resizeEditor().then(() => {
+                            this.options.onCropEnd();
+                        });
                     })['catch'](message => (
                         Promise.reject(message)
                     ));
@@ -400,9 +408,11 @@ export default {
                 if (length) {
                     this.ui.changeUndoButtonStatus(true);
                     this.ui.changeResetButtonStatus(true);
+                    this.options.onChangeResetStatus(true);
                 } else {
                     this.ui.changeUndoButtonStatus(false);
                     this.ui.changeResetButtonStatus(false);
+                    this.options.onChangeResetStatus(false);
                 }
                 this.ui.resizeEditor();
             },

@@ -18,6 +18,8 @@ const FILTER_OPTIONS = [
     'emboss',
     'remove-white',
     'brightness',
+    'contrast',
+    'saturation',
     'noise',
     'pixelate',
     'color-filter',
@@ -92,6 +94,14 @@ class Filter extends Submenu {
         this._els.pixelateRange.on('change', () => changeRangeValue('pixelate'));
         this._els.noiseRange.on('change', () => changeRangeValue('noise'));
         this._els.brightnessRange.on('change', () => changeRangeValue('brightness'));
+        this._els.brightnessRangeValue.value = this._els.brightnessRange.value;
+        this._els.brightnessRangeValue.setAttribute('readonly', true);
+        this._els.contrastRange.on('change', () => changeRangeValue('contrast'));
+        this._els.contrastRangeValue.value = this._els.contrastRange.value;
+        this._els.contrastRangeValue.setAttribute('readonly', true);
+        this._els.saturationRange.on('change', () => changeRangeValue('saturation'));
+        this._els.saturationRangeValue.value = this._els.saturationRange.value;
+        this._els.saturationRangeValue.setAttribute('readonly', true);
         this._els.blendType.addEventListener('change', () => changeRangeValue('blend'));
         this._els.filterBlendColor.on('change', () => changeRangeValue('blend'));
         this._els.filterMultiplyColor.on('change', () => changeRangeValue('multiply'));
@@ -101,6 +111,15 @@ class Filter extends Submenu {
         this._els.filterMultiplyColor.on('changeShow', this.colorPickerChangeShow.bind(this));
         this._els.filterTintColor.on('changeShow', this.colorPickerChangeShow.bind(this));
         this._els.filterBlendColor.on('changeShow', this.colorPickerChangeShow.bind(this));
+    }
+
+    resetRangeValue() {
+        this._els.brightnessRange.value = 0;
+        this._els.brightnessRangeValue.value = 0;
+        this._els.contrastRange.value = 0;
+        this._els.contrastRangeValue.value = 0;
+        this._els.saturationRange.value = 0;
+        this._els.saturationRangeValue.value = 0;
     }
 
     /**
@@ -131,6 +150,7 @@ class Filter extends Submenu {
      */
     _getFilterOption(type) { // eslint-disable-line
         const option = {};
+        let value;
         switch (type) {
             case 'removeWhite':
                 option.color = '#FFFFFF';
@@ -148,7 +168,19 @@ class Filter extends Submenu {
                 option.noise = toInteger(this._els.noiseRange.value);
                 break;
             case 'brightness':
-                option.brightness = parseFloat(this._els.brightnessRange.value);
+                value = parseFloat(this._els.brightnessRange.value);
+                option.brightness = value;
+                this._els.brightnessRangeValue.value = toInteger(value * 100);
+                break;
+            case 'contrast':
+                value = parseFloat(this._els.contrastRange.value);
+                option.contrast = value;
+                this._els.contrastRangeValue.value = toInteger(value * 100);
+                break;
+            case 'saturation':
+                value = parseFloat(this._els.saturationRange.value);
+                option.saturation = value;
+                this._els.saturationRangeValue.value = toInteger(value * 100);
                 break;
             case 'blend':
                 option.mode = 'add';
@@ -185,6 +217,17 @@ class Filter extends Submenu {
                 this.selector('.tie-brightness-range'),
                 FILTER_RANGE.brightnessRange
             ),
+            brightnessRangeValue: this.selector('.tie-brightness-range-value'),
+            contrastRange: new Range(
+                this.selector('.tie-contrast-range'),
+                FILTER_RANGE.contrastRange
+            ),
+            contrastRangeValue: this.selector('.tie-contrast-range-value'),
+            saturationRange: new Range(
+                this.selector('.tie-saturation-range'),
+                FILTER_RANGE.saturationRange
+            ),
+            saturationRangeValue: this.selector('.tie-saturation-range-value'),
             noiseRange: new Range(
                 this.selector('.tie-noise-range'),
                 FILTER_RANGE.noiseRange
