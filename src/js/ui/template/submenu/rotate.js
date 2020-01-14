@@ -16,7 +16,7 @@ export default ({locale, iconStyle: {normal, active}}) => (`
                             class="active"/>
                     </svg>
                 </div>
-                <label> 30 </label>
+                <label> 90 </label>
             </div>
             <div class="tui-image-editor-button counterclockwise">
                 <div>
@@ -27,14 +27,14 @@ export default ({locale, iconStyle: {normal, active}}) => (`
                             class="active"/>
                     </svg>
                 </div>
-                <label> -30 </label>
+                <label> -90 </label>
             </div>
         </li>
         <li class="tui-image-editor-partition only-left-right">
             <div></div>
         </li>
         <li class="tui-image-editor-newline tui-image-editor-range-wrap">
-            <label class="range">${locale.localize('Range')}</label>
+            <label class="range">${locale.localize('Angle')}</label>
             <div class="tie-rotate-range"></div>
             <input class="tie-ratate-range-value tui-image-editor-range-value" value="0" />
         </li>

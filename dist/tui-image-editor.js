@@ -1554,6 +1554,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'rotate',
 	        value: function rotate(angle, isSilent) {
+	            this.options.onRotateStart();
+
 	            return this._rotate('rotate', angle, isSilent);
 	        }
 
@@ -7584,8 +7586,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var CLOCKWISE = 30;
-	var COUNTERCLOCKWISE = -30;
+	var CLOCKWISE = 90;
+	var COUNTERCLOCKWISE = -90;
 
 	/**
 	 * Rotate ui class
@@ -7629,7 +7631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var resultAngle = angle;
 
 	            if (type === 'rotate') {
-	                resultAngle = parseInt(this._els.rotateRangeValue.value, 10) + angle;
+	                resultAngle = (parseInt(this._els.rotateRangeValue.value, 10) + angle) % 360;
 	            }
 
 	            this._els.rotateRangeValue.value = resultAngle;
@@ -7684,7 +7686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: '_changeRotateForButton',
 	        value: function _changeRotateForButton(event) {
 	            var button = event.target.closest('.tui-image-editor-button');
-	            var angle = this._els.rotateRangeValue.value;
+	            // const angle = this._els.rotateRangeValue.value;
 
 	            if (button) {
 	                var rotateType = this.getButtonType(button, ['counterclockwise', 'clockwise']);
@@ -7692,11 +7694,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    clockwise: CLOCKWISE,
 	                    counterclockwise: COUNTERCLOCKWISE
 	                }[rotateType];
-	                var newAngle = parseInt(angle, 10) + rotateAngle;
-	                var isRotatable = newAngle >= -360 && newAngle <= 360;
-	                if (isRotatable) {
-	                    this.actions.rotate(rotateAngle);
-	                }
+	                // const newAngle = parseInt(angle, 10) + rotateAngle;
+	                // const isRotatable = newAngle >= -360 && newAngle <= 360;
+	                // if (isRotatable) {
+	                this.actions.rotate(rotateAngle);
+	                // }
 	            }
 	        }
 	    }]);
@@ -7727,7 +7729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _ref$iconStyle = _ref.iconStyle,
 	        normal = _ref$iconStyle.normal,
 	        active = _ref$iconStyle.active;
-	    return '\n    <ul class="tui-image-editor-submenu-item">\n        <li class="tie-retate-button">\n            <div class="tui-image-editor-button clockwise">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-rotate-clockwise"\n                            class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-rotate-clockwise"\n                            class="active"/>\n                    </svg>\n                </div>\n                <label> 30 </label>\n            </div>\n            <div class="tui-image-editor-button counterclockwise">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-rotate-counterclockwise"\n                            class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-rotate-counterclockwise"\n                            class="active"/>\n                    </svg>\n                </div>\n                <label> -30 </label>\n            </div>\n        </li>\n        <li class="tui-image-editor-partition only-left-right">\n            <div></div>\n        </li>\n        <li class="tui-image-editor-newline tui-image-editor-range-wrap">\n            <label class="range">' + locale.localize('Range') + '</label>\n            <div class="tie-rotate-range"></div>\n            <input class="tie-ratate-range-value tui-image-editor-range-value" value="0" />\n        </li>\n    </ul>\n';
+	    return '\n    <ul class="tui-image-editor-submenu-item">\n        <li class="tie-retate-button">\n            <div class="tui-image-editor-button clockwise">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-rotate-clockwise"\n                            class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-rotate-clockwise"\n                            class="active"/>\n                    </svg>\n                </div>\n                <label> 90 </label>\n            </div>\n            <div class="tui-image-editor-button counterclockwise">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-rotate-counterclockwise"\n                            class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-rotate-counterclockwise"\n                            class="active"/>\n                    </svg>\n                </div>\n                <label> -90 </label>\n            </div>\n        </li>\n        <li class="tui-image-editor-partition only-left-right">\n            <div></div>\n        </li>\n        <li class="tui-image-editor-newline tui-image-editor-range-wrap">\n            <label class="range">' + locale.localize('Angle') + '</label>\n            <div class="tie-rotate-range"></div>\n            <input class="tie-ratate-range-value tui-image-editor-range-value" value="0" />\n        </li>\n    </ul>\n';
 	};
 
 /***/ }),
@@ -9446,12 +9448,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return (0, _tuiCodeSnippet.extend)({
 	            rotate: function rotate(angle, isSilent) {
 	                _this6.rotate(angle, isSilent);
-	                _this6.ui.resizeEditor();
+	                _this6.ui.resizeEditor().then(function () {
+	                    _this6.options.onRotateEnd();
+	                });
 	                _this6.ui.rotate.setRangeBarAngle('rotate', angle);
 	            },
 	            setAngle: function setAngle(angle, isSilent) {
 	                _this6.setAngle(angle, isSilent);
-	                _this6.ui.resizeEditor();
+	                _this6.ui.resizeEditor().then(function () {
+	                    _this6.options.onRotate();
+	                });
 	                _this6.ui.rotate.setRangeBarAngle('setAngle', angle);
 	            }
 	        }, this._commonAction());

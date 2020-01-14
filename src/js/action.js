@@ -287,12 +287,16 @@ export default {
         return extend({
             rotate: (angle, isSilent) => {
                 this.rotate(angle, isSilent);
-                this.ui.resizeEditor();
+                this.ui.resizeEditor().then(() => {
+                    this.options.onRotateEnd();
+                });
                 this.ui.rotate.setRangeBarAngle('rotate', angle);
             },
             setAngle: (angle, isSilent) => {
                 this.setAngle(angle, isSilent);
-                this.ui.resizeEditor();
+                this.ui.resizeEditor().then(() => {
+                    this.options.onRotate();
+                });
                 this.ui.rotate.setRangeBarAngle('setAngle', angle);
             }
         }, this._commonAction());

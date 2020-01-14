@@ -805,6 +805,8 @@ class ImageEditor {
      * });
      */
     rotate(angle, isSilent) {
+        this.options.onRotateStart();
+
         return this._rotate('rotate', angle, isSilent);
     }
 

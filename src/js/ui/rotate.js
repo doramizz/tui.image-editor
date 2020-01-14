@@ -4,8 +4,8 @@ import templateHtml from './template/submenu/rotate';
 import {toInteger} from '../util';
 import {defaultRotateRangeValus} from '../consts';
 
-const CLOCKWISE = 30;
-const COUNTERCLOCKWISE = -30;
+const CLOCKWISE = 90;
+const COUNTERCLOCKWISE = -90;
 
 /**
  * Rotate ui class
@@ -35,7 +35,7 @@ class Rotate extends Submenu {
         let resultAngle = angle;
 
         if (type === 'rotate') {
-            resultAngle = parseInt(this._els.rotateRangeValue.value, 10) + angle;
+            resultAngle = (parseInt(this._els.rotateRangeValue.value, 10) + angle) % 360;
         }
 
         this._els.rotateRangeValue.value = resultAngle;
@@ -80,7 +80,7 @@ class Rotate extends Submenu {
      */
     _changeRotateForButton(event) {
         const button = event.target.closest('.tui-image-editor-button');
-        const angle = this._els.rotateRangeValue.value;
+        // const angle = this._els.rotateRangeValue.value;
 
         if (button) {
             const rotateType = this.getButtonType(button, ['counterclockwise', 'clockwise']);
@@ -88,11 +88,11 @@ class Rotate extends Submenu {
                 clockwise: CLOCKWISE,
                 counterclockwise: COUNTERCLOCKWISE
             }[rotateType];
-            const newAngle = parseInt(angle, 10) + rotateAngle;
-            const isRotatable = newAngle >= -360 && newAngle <= 360;
-            if (isRotatable) {
-                this.actions.rotate(rotateAngle);
-            }
+            // const newAngle = parseInt(angle, 10) + rotateAngle;
+            // const isRotatable = newAngle >= -360 && newAngle <= 360;
+            // if (isRotatable) {
+            this.actions.rotate(rotateAngle);
+            // }
         }
     }
 }
