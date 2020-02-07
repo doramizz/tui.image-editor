@@ -4912,19 +4912,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: true
+	            realTimeEvent: false
 	        },
 	        contrastRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: true
+	            realTimeEvent: false
 	        },
 	        saturationRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: true
+	            realTimeEvent: false
 	        },
 	        noiseRange: {
 	            min: 0,
