@@ -970,15 +970,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var existRemoveObject = activeObject || activeObjectGroup && activeObjectGroup.size();
 	            var isModifierKey = ctrlKey || metaKey;
 
-	            if (isModifierKey) {
-	                if (keyCode === keyCodes.Z) {
-	                    // There is no error message on shortcut when it's empty
-	                    this.undo()['catch'](function () {});
-	                } else if (keyCode === keyCodes.Y) {
-	                    // There is no error message on shortcut when it's empty
-	                    this.redo()['catch'](function () {});
-	                }
-	            }
+	            // if (isModifierKey) {
+	            //     if (keyCode === keyCodes.Z) {
+	            //         // There is no error message on shortcut when it's empty
+	            //         this.undo()['catch'](() => {
+	            //         });
+	            //     } else if (keyCode === keyCodes.Y) {
+	            //         // There is no error message on shortcut when it's empty
+	            //         this.redo()['catch'](() => {
+	            //         });
+	            //     }
+	            // }
 
 	            var isDeleteKey = keyCode === keyCodes.BACKSPACE || keyCode === keyCodes.DEL;
 	            var isEditing = activeObject && activeObject.isEditing;
