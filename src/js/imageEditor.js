@@ -323,17 +323,17 @@ class ImageEditor {
         const existRemoveObject = activeObject || (activeObjectGroup && activeObjectGroup.size());
         const isModifierKey = (ctrlKey || metaKey);
 
-        if (isModifierKey) {
-            if (keyCode === keyCodes.Z) {
-                // There is no error message on shortcut when it's empty
-                this.undo()['catch'](() => {
-                });
-            } else if (keyCode === keyCodes.Y) {
-                // There is no error message on shortcut when it's empty
-                this.redo()['catch'](() => {
-                });
-            }
-        }
+        // if (isModifierKey) {
+        //     if (keyCode === keyCodes.Z) {
+        //         // There is no error message on shortcut when it's empty
+        //         this.undo()['catch'](() => {
+        //         });
+        //     } else if (keyCode === keyCodes.Y) {
+        //         // There is no error message on shortcut when it's empty
+        //         this.redo()['catch'](() => {
+        //         });
+        //     }
+        // }
 
         const isDeleteKey = keyCode === keyCodes.BACKSPACE || keyCode === keyCodes.DEL;
         const isEditing = activeObject && activeObject.isEditing;
