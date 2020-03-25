@@ -961,14 +961,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: '_onKeyDown',
 	        value: function _onKeyDown(e) {
-	            var ctrlKey = e.ctrlKey,
-	                keyCode = e.keyCode,
-	                metaKey = e.metaKey;
+	            var keyCode = e.keyCode;
+	            // const {ctrlKey, keyCode, metaKey} = e;
 
 	            var activeObject = this._graphics.getActiveObject();
 	            var activeObjectGroup = this._graphics.getActiveObjects();
 	            var existRemoveObject = activeObject || activeObjectGroup && activeObjectGroup.size();
-	            var isModifierKey = ctrlKey || metaKey;
+	            // const isModifierKey = (ctrlKey || metaKey);
 
 	            // if (isModifierKey) {
 	            //     if (keyCode === keyCodes.Z) {

@@ -317,11 +317,12 @@ class ImageEditor {
      */
     /* eslint-disable complexity */
     _onKeyDown(e) {
-        const {ctrlKey, keyCode, metaKey} = e;
+        const {keyCode} = e;
+        // const {ctrlKey, keyCode, metaKey} = e;
         const activeObject = this._graphics.getActiveObject();
         const activeObjectGroup = this._graphics.getActiveObjects();
         const existRemoveObject = activeObject || (activeObjectGroup && activeObjectGroup.size());
-        const isModifierKey = (ctrlKey || metaKey);
+        // const isModifierKey = (ctrlKey || metaKey);
 
         // if (isModifierKey) {
         //     if (keyCode === keyCodes.Z) {
