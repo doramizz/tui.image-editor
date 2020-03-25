@@ -17,6 +17,7 @@ class Range {
         this._max = options.max || 100;
         this._absMax = (this._min * -1) + this._max;
         this.realTimeEvent = options.realTimeEvent || false;
+        this.realTimeRange = options.realTimeRange || false;
 
         this._addClickEvent();
         this._addDragEvent();
@@ -153,6 +154,10 @@ class Range {
 
         if (this.realTimeEvent) {
             this.fire('change', value, false);
+        }
+
+        if (this.realTimeRange) {
+            this.fire('input', value, false);
         }
     }
 

@@ -4914,19 +4914,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        contrastRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        saturationRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        noiseRange: {
 	            min: 0,
@@ -6849,6 +6852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._max = options.max || 100;
 	        this._absMax = this._min * -1 + this._max;
 	        this.realTimeEvent = options.realTimeEvent || false;
+	        this.realTimeRange = options.realTimeRange || false;
 
 	        this._addClickEvent();
 	        this._addDragEvent();
@@ -6971,6 +6975,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if (this.realTimeEvent) {
 	                this.fire('change', value, false);
+	            }
+
+	            if (this.realTimeRange) {
+	                this.fire('input', value, false);
 	            }
 	        }
 
@@ -8736,6 +8744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var applyFilter = _ref2.applyFilter;
 
 	            var changeRangeValue = this._changeRangeValue.bind(this, applyFilter);
+	            var changeRangeValueOnly = this._changeRangeValueOnly.bind(this);
 
 	            _tuiCodeSnippet2.default.forEach(FILTER_OPTIONS, function (filter) {
 	                var filterCheckElement = _this2.selector('.tie-' + filter);
@@ -8762,15 +8771,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._els.brightnessRange.on('change', function () {
 	                return changeRangeValue('brightness');
 	            });
+	            this._els.brightnessRange.on('input', function () {
+	                return changeRangeValueOnly('brightness');
+	            });
 	            this._els.brightnessRangeValue.value = this._els.brightnessRange.value;
 	            this._els.brightnessRangeValue.setAttribute('readonly', true);
 	            this._els.contrastRange.on('change', function () {
 	                return changeRangeValue('contrast');
 	            });
+	            this._els.contrastRange.on('input', function () {
+	                return changeRangeValueOnly('contrast');
+	            });
 	            this._els.contrastRangeValue.value = this._els.contrastRange.value;
 	            this._els.contrastRangeValue.setAttribute('readonly', true);
 	            this._els.saturationRange.on('change', function () {
 	                return changeRangeValue('saturation');
+	            });
+	            this._els.saturationRange.on('input', function () {
+	                return changeRangeValueOnly('saturation');
 	            });
 	            this._els.saturationRangeValue.value = this._els.saturationRange.value;
 	            this._els.saturationRangeValue.setAttribute('readonly', true);
@@ -8827,7 +8845,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    checkboxGroup.classList.add('tui-image-editor-disabled');
 	                }
 	            }
+	            this._getFilterOption(filter);
 	            applyFilter(apply, type, this._getFilterOption(filter));
+	        }
+	    }, {
+	        key: '_changeRangeValueOnly',
+	        value: function _changeRangeValueOnly(filter) {
+	            this._getFilterOption(filter);
 	        }
 
 	        /**
