@@ -963,6 +963,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function _onKeyDown(e) {
 	            var keyCode = e.keyCode;
 	            // const {ctrlKey, keyCode, metaKey} = e;
+	            // const {ctrlKey, keyCode, metaKey} = e;
 
 	            var activeObject = this._graphics.getActiveObject();
 	            var activeObjectGroup = this._graphics.getActiveObjects();

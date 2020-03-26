@@ -319,6 +319,7 @@ class ImageEditor {
     _onKeyDown(e) {
         const {keyCode} = e;
         // const {ctrlKey, keyCode, metaKey} = e;
+        // const {ctrlKey, keyCode, metaKey} = e;
         const activeObject = this._graphics.getActiveObject();
         const activeObjectGroup = this._graphics.getActiveObjects();
         const existRemoveObject = activeObject || (activeObjectGroup && activeObjectGroup.size());
