@@ -177,7 +177,7 @@ module.exports = {
         realTimeEvent: false,
         min: 2,
         max: 300,
-        value: 3
+        value: 10
     },
 
     defaultTextRangeValus: {
@@ -202,19 +202,22 @@ module.exports = {
             min: -1,
             max: 1,
             value: 0,
-            realTimeEvent: false
+            realTimeEvent: false,
+            realTimeRange: true
         },
         contrastRange: {
             min: -1,
             max: 1,
             value: 0,
-            realTimeEvent: false
+            realTimeEvent: false,
+            realTimeRange: true
         },
         saturationRange: {
             min: -1,
             max: 1,
             value: 0,
-            realTimeEvent: false
+            realTimeEvent: false,
+            realTimeRange: true
         },
         noiseRange: {
             min: 0,

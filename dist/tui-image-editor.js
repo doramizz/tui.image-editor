@@ -962,24 +962,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: '_onKeyDown',
 	        value: function _onKeyDown(e) {
-	            var ctrlKey = e.ctrlKey,
-	                keyCode = e.keyCode,
-	                metaKey = e.metaKey;
+	            var keyCode = e.keyCode;
+	            // const {ctrlKey, keyCode, metaKey} = e;
+	            // const {ctrlKey, keyCode, metaKey} = e;
 
 	            var activeObject = this._graphics.getActiveObject();
 	            var activeObjectGroup = this._graphics.getActiveObjects();
 	            var existRemoveObject = activeObject || activeObjectGroup && activeObjectGroup.size();
-	            var isModifierKey = ctrlKey || metaKey;
+	            // const isModifierKey = (ctrlKey || metaKey);
 
-	            if (isModifierKey) {
-	                if (keyCode === keyCodes.Z) {
-	                    // There is no error message on shortcut when it's empty
-	                    this.undo()['catch'](function () {});
-	                } else if (keyCode === keyCodes.Y) {
-	                    // There is no error message on shortcut when it's empty
-	                    this.redo()['catch'](function () {});
-	                }
-	            }
+	            // if (isModifierKey) {
+	            //     if (keyCode === keyCodes.Z) {
+	            //         // There is no error message on shortcut when it's empty
+	            //         this.undo()['catch'](() => {
+	            //         });
+	            //     } else if (keyCode === keyCodes.Y) {
+	            //         // There is no error message on shortcut when it's empty
+	            //         this.redo()['catch'](() => {
+	            //         });
+	            //     }
+	            // }
 
 	            var isDeleteKey = keyCode === keyCodes.BACKSPACE || keyCode === keyCodes.DEL;
 	            var isEditing = activeObject && activeObject.isEditing;
@@ -4904,7 +4906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        realTimeEvent: false,
 	        min: 2,
 	        max: 300,
-	        value: 3
+	        value: 10
 	    },
 
 	    defaultTextRangeValus: {
@@ -4929,19 +4931,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        contrastRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        saturationRange: {
 	            min: -1,
 	            max: 1,
 	            value: 0,
-	            realTimeEvent: false
+	            realTimeEvent: false,
+	            realTimeRange: true
 	        },
 	        noiseRange: {
 	            min: 0,
@@ -6869,6 +6874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._max = options.max || 100;
 	        this._absMax = this._min * -1 + this._max;
 	        this.realTimeEvent = options.realTimeEvent || false;
+	        this.realTimeRange = options.realTimeRange || false;
 
 	        this._addClickEvent();
 	        this._addDragEvent();
@@ -6991,6 +6997,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if (this.realTimeEvent) {
 	                this.fire('change', value, false);
+	            }
+
+	            if (this.realTimeRange) {
+	                this.fire('input', value, false);
 	            }
 	        }
 
@@ -8634,7 +8644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _ref$iconStyle = _ref.iconStyle,
 	        normal = _ref$iconStyle.normal,
 	        active = _ref$iconStyle.active;
-	    return '\n    <ul class="tui-image-editor-submenu-item">\n        <li class="tie-draw-line-select-button">\n            <div class="tui-image-editor-button free">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-draw-free" class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-draw-free" class="active"/>\n                    </svg>\n                </div>\n                <label>\n                    ' + locale.localize('Free') + '\n                </label>\n            </div>\n            <div class="tui-image-editor-button line">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-draw-line" class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-draw-line" class="active"/>\n                    </svg>\n                </div>\n                <label>\n                    ' + locale.localize('Straight') + '\n                </label>\n            </div>\n        </li>\n        <li class="tui-image-editor-partition">\n            <div></div>\n        </li>\n        <li>\n            <div class="tie-draw-color" title="' + locale.localize('Color') + '"></div>\n        </li>\n        <li class="tui-image-editor-partition only-left-right">\n            <div></div>\n        </li>\n        <li class="tui-image-editor-newline tui-image-editor-range-wrap">\n            <label class="range">' + locale.localize('Range') + '</label>\n            <div class="tie-draw-range"></div>\n            <input class="tie-draw-range-value tui-image-editor-range-value" value="0" />\n        </li>\n    </ul>\n';
+	    return '\n    <ul class="tui-image-editor-submenu-item">\n        <li class="tie-draw-line-select-button">\n            <div class="tui-image-editor-button free">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-draw-free" class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-draw-free" class="active"/>\n                    </svg>\n                </div>\n                <label>\n                    ' + locale.localize('Free') + '\n                </label>\n            </div>\n            <div class="tui-image-editor-button line">\n                <div>\n                    <svg class="svg_ic-submenu">\n                        <use xlink:href="' + normal.path + '#' + normal.name + '-ic-draw-line" class="normal"/>\n                        <use xlink:href="' + active.path + '#' + active.name + '-ic-draw-line" class="active"/>\n                    </svg>\n                </div>\n                <label>\n                    ' + locale.localize('Straight') + '\n                </label>\n            </div>\n        </li>\n        <li class="tui-image-editor-partition">\n            <div></div>\n        </li>\n        <li>\n            <div class="tie-draw-color" title="' + locale.localize('Color') + '"></div>\n        </li>\n        <li class="tui-image-editor-partition only-left-right">\n            <div></div>\n        </li>\n        <li class="tui-image-editor-newline tui-image-editor-range-wrap">\n            <label class="range">' + locale.localize('Stroke') + '</label>\n            <div class="tie-draw-range"></div>\n            <input class="tie-draw-range-value tui-image-editor-range-value" value="0" />\n        </li>\n    </ul>\n';
 	};
 
 /***/ }),
@@ -8756,6 +8766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var applyFilter = _ref2.applyFilter;
 
 	            var changeRangeValue = this._changeRangeValue.bind(this, applyFilter);
+	            var changeRangeValueOnly = this._changeRangeValueOnly.bind(this);
 
 	            _tuiCodeSnippet2.default.forEach(FILTER_OPTIONS, function (filter) {
 	                var filterCheckElement = _this2.selector('.tie-' + filter);
@@ -8782,15 +8793,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._els.brightnessRange.on('change', function () {
 	                return changeRangeValue('brightness');
 	            });
+	            this._els.brightnessRange.on('input', function () {
+	                return changeRangeValueOnly('brightness');
+	            });
 	            this._els.brightnessRangeValue.value = this._els.brightnessRange.value;
 	            this._els.brightnessRangeValue.setAttribute('readonly', true);
 	            this._els.contrastRange.on('change', function () {
 	                return changeRangeValue('contrast');
 	            });
+	            this._els.contrastRange.on('input', function () {
+	                return changeRangeValueOnly('contrast');
+	            });
 	            this._els.contrastRangeValue.value = this._els.contrastRange.value;
 	            this._els.contrastRangeValue.setAttribute('readonly', true);
 	            this._els.saturationRange.on('change', function () {
 	                return changeRangeValue('saturation');
+	            });
+	            this._els.saturationRange.on('input', function () {
+	                return changeRangeValueOnly('saturation');
 	            });
 	            this._els.saturationRangeValue.value = this._els.saturationRange.value;
 	            this._els.saturationRangeValue.setAttribute('readonly', true);
@@ -8847,7 +8867,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    checkboxGroup.classList.add('tui-image-editor-disabled');
 	                }
 	            }
+	            this._getFilterOption(filter);
 	            applyFilter(apply, type, this._getFilterOption(filter));
+	        }
+	    }, {
+	        key: '_changeRangeValueOnly',
+	        value: function _changeRangeValueOnly(filter) {
+	            this._getFilterOption(filter);
 	        }
 
 	        /**
@@ -9866,11 +9892,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            setMeasureBaselineToggle: function setMeasureBaselineToggle(flag) {
 	                _this11.setMeasureBaselineToggle(flag);
 	            }
-	            // setColor: color => {
-	            //     this.setBrush({
-	            //         color
-	            //     });
-	            // }
 	        }, this._commonAction());
 	    },
 

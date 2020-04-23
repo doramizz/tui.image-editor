@@ -80,6 +80,7 @@ class Filter extends Submenu {
      */
     addEvent({applyFilter}) {
         const changeRangeValue = this._changeRangeValue.bind(this, applyFilter);
+        const changeRangeValueOnly = this._changeRangeValueOnly.bind(this);
 
         snippet.forEach(FILTER_OPTIONS, filter => {
             const filterCheckElement = this.selector(`.tie-${filter}`);
@@ -94,12 +95,15 @@ class Filter extends Submenu {
         this._els.pixelateRange.on('change', () => changeRangeValue('pixelate'));
         this._els.noiseRange.on('change', () => changeRangeValue('noise'));
         this._els.brightnessRange.on('change', () => changeRangeValue('brightness'));
+        this._els.brightnessRange.on('input', () => changeRangeValueOnly('brightness'));
         this._els.brightnessRangeValue.value = this._els.brightnessRange.value;
         this._els.brightnessRangeValue.setAttribute('readonly', true);
         this._els.contrastRange.on('change', () => changeRangeValue('contrast'));
+        this._els.contrastRange.on('input', () => changeRangeValueOnly('contrast'));
         this._els.contrastRangeValue.value = this._els.contrastRange.value;
         this._els.contrastRangeValue.setAttribute('readonly', true);
         this._els.saturationRange.on('change', () => changeRangeValue('saturation'));
+        this._els.saturationRange.on('input', () => changeRangeValueOnly('saturation'));
         this._els.saturationRangeValue.value = this._els.saturationRange.value;
         this._els.saturationRangeValue.setAttribute('readonly', true);
         this._els.blendType.addEventListener('change', () => changeRangeValue('blend'));
@@ -139,7 +143,12 @@ class Filter extends Submenu {
                 checkboxGroup.classList.add('tui-image-editor-disabled');
             }
         }
+        this._getFilterOption(filter);
         applyFilter(apply, type, this._getFilterOption(filter));
+    }
+
+    _changeRangeValueOnly(filter) {
+        this._getFilterOption(filter);
     }
 
     /**

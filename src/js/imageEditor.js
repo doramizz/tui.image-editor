@@ -318,23 +318,25 @@ class ImageEditor {
      */
     /* eslint-disable complexity */
     _onKeyDown(e) {
-        const {ctrlKey, keyCode, metaKey} = e;
+        const {keyCode} = e;
+        // const {ctrlKey, keyCode, metaKey} = e;
+        // const {ctrlKey, keyCode, metaKey} = e;
         const activeObject = this._graphics.getActiveObject();
         const activeObjectGroup = this._graphics.getActiveObjects();
         const existRemoveObject = activeObject || (activeObjectGroup && activeObjectGroup.size());
-        const isModifierKey = (ctrlKey || metaKey);
+        // const isModifierKey = (ctrlKey || metaKey);
 
-        if (isModifierKey) {
-            if (keyCode === keyCodes.Z) {
-                // There is no error message on shortcut when it's empty
-                this.undo()['catch'](() => {
-                });
-            } else if (keyCode === keyCodes.Y) {
-                // There is no error message on shortcut when it's empty
-                this.redo()['catch'](() => {
-                });
-            }
-        }
+        // if (isModifierKey) {
+        //     if (keyCode === keyCodes.Z) {
+        //         // There is no error message on shortcut when it's empty
+        //         this.undo()['catch'](() => {
+        //         });
+        //     } else if (keyCode === keyCodes.Y) {
+        //         // There is no error message on shortcut when it's empty
+        //         this.redo()['catch'](() => {
+        //         });
+        //     }
+        // }
 
         const isDeleteKey = keyCode === keyCodes.BACKSPACE || keyCode === keyCodes.DEL;
         const isEditing = activeObject && activeObject.isEditing;
