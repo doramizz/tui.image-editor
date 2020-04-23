@@ -13,7 +13,7 @@
 		exports["ImageEditor"] = factory(require("tui-code-snippet"), require("tui-color-picker"), require("fabric")["fabric"]);
 	else
 		root["tui"] = root["tui"] || {}, root["tui"]["ImageEditor"] = factory((root["tui"] && root["tui"]["util"]), (root["tui"] && root["tui"]["colorPicker"]), root["fabric"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_82__, __WEBPACK_EXTERNAL_MODULE_106__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_82__, __WEBPACK_EXTERNAL_MODULE_108__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -68,19 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _imageEditor2 = _interopRequireDefault(_imageEditor);
 
-	__webpack_require__(131);
-
-	__webpack_require__(133);
-
-	__webpack_require__(134);
-
-	__webpack_require__(135);
-
-	__webpack_require__(136);
-
 	__webpack_require__(137);
-
-	__webpack_require__(138);
 
 	__webpack_require__(139);
 
@@ -107,6 +95,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(150);
 
 	__webpack_require__(151);
+
+	__webpack_require__(152);
+
+	__webpack_require__(153);
+
+	__webpack_require__(154);
+
+	__webpack_require__(155);
+
+	__webpack_require__(156);
+
+	__webpack_require__(157);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -609,7 +609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui2 = _interopRequireDefault(_ui);
 
-	var _action = __webpack_require__(103);
+	var _action = __webpack_require__(105);
 
 	var _action2 = _interopRequireDefault(_action);
 
@@ -617,7 +617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _command2 = _interopRequireDefault(_command);
 
-	var _graphics = __webpack_require__(105);
+	var _graphics = __webpack_require__(107);
 
 	var _graphics2 = _interopRequireDefault(_graphics);
 
@@ -737,7 +737,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            cssMaxWidth: options.cssMaxWidth,
 	            cssMaxHeight: options.cssMaxHeight,
 	            useItext: !!this.ui,
-	            useDragAddIcon: !!this.ui
+	            useDragAddIcon: !!this.ui,
+	            measureInitPosition: options.measureInitPosition
 	        });
 
 	        /**
@@ -1650,6 +1651,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'setDrawingShape',
 	        value: function setDrawingShape(type, options) {
 	            this._graphics.setDrawingShape(type, options);
+	        }
+	    }, {
+	        key: 'setMeasureInit',
+	        value: function setMeasureInit(baselinePoints) {
+	            this._graphics.setMeasureInit(baselinePoints);
+	            this.ui.measure.baselineButtonToggle(false);
+	        }
+	    }, {
+	        key: 'setMeasureBaselineToggle',
+	        value: function setMeasureBaselineToggle(flag) {
+	            this._graphics.setMeasureBaselineToggle(flag);
 	        }
 
 	        /**
@@ -4746,7 +4758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Component names
 	     * @type {Object.<string, string>}
 	     */
-	    componentNames: _util2.default.keyMirror('IMAGE_LOADER', 'CROPPER', 'FLIP', 'ROTATION', 'FREE_DRAWING', 'LINE', 'TEXT', 'ICON', 'FILTER', 'SHAPE'),
+	    componentNames: _util2.default.keyMirror('IMAGE_LOADER', 'CROPPER', 'FLIP', 'ROTATION', 'FREE_DRAWING', 'LINE', 'TEXT', 'ICON', 'FILTER', 'SHAPE', 'MEASURE_BASELINE', 'MEASURE_LINE'),
 
 	    /**
 	     * Command names
@@ -4762,6 +4774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'APPLY_FILTER': 'applyFilter',
 	        'REMOVE_FILTER': 'removeFilter',
 	        'ADD_ICON': 'addIcon',
+	        'ADD_MEASURE_ICON': 'addMeasureIcon',
 	        'CHANGE_ICON_COLOR': 'changeIconColor',
 	        'ADD_SHAPE': 'addShape',
 	        'CHANGE_SHAPE': 'changeShape',
@@ -4804,7 +4817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Editor states
 	     * @type {Object.<string, string>}
 	     */
-	    drawingModes: _util2.default.keyMirror('NORMAL', 'CROPPER', 'FREE_DRAWING', 'LINE_DRAWING', 'TEXT', 'SHAPE'),
+	    drawingModes: _util2.default.keyMirror('NORMAL', 'CROPPER', 'FREE_DRAWING', 'LINE_DRAWING', 'TEXT', 'SHAPE', 'MEASURE_BASELINE', 'MEASURE_LINE'),
 
 	    /**
 	     * Shortcut key values
@@ -4826,10 +4839,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        SELECTION_STYLE: {
 	            borderColor: 'red',
 	            cornerColor: 'green',
-	            cornerSize: 10,
+	            cornerSize: 20,
 	            originX: 'center',
 	            originY: 'center',
-	            transparentCorners: false
+	            transparentCorners: false,
+	            strokeUniform: true,
+	            lockUniScaling: true,
+	            centeredScaling: false,
+	            centeredRotation: false
 	        }
 	    },
 
@@ -5015,7 +5032,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _filter2 = _interopRequireDefault(_filter);
 
-	var _locale = __webpack_require__(102);
+	var _measure = __webpack_require__(102);
+
+	var _measure2 = _interopRequireDefault(_measure);
+
+	var _locale = __webpack_require__(104);
 
 	var _locale2 = _interopRequireDefault(_locale);
 
@@ -5032,7 +5053,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Mask: _mask2.default,
 	    Icon: _icon2.default,
 	    Draw: _draw2.default,
-	    Filter: _filter2.default
+	    Filter: _filter2.default,
+	    Measure: _measure2.default
 	};
 
 	var BI_EXPRESSION_MINSIZE_WHEN_TOP_POSITION = '1300';
@@ -5289,7 +5311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                },
 	                locale: {},
 	                menuIconPath: '',
-	                menu: ['crop', 'flip', 'rotate', 'draw', 'shape', 'icon', 'text', 'mask', 'filter'],
+	                menu: ['crop', 'flip', 'rotate', 'draw', 'shape', 'icon', 'text', 'mask', 'filter', 'measure'],
 	                initMenu: '',
 	                uiSize: {
 	                    width: '100%',
@@ -6026,7 +6048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        submenuIconSize = _ref.submenuIconSize,
 	        menuIconSize = _ref.menuIconSize,
 	        biSize = _ref.biSize;
-	    return "\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"] label,\n    .tie-icon-add-button.icon-heart .tui-image-editor-button[data-icontype=\"icon-heart\"] label,\n    .tie-icon-add-button.icon-location .tui-image-editor-button[data-icontype=\"icon-location\"] label,\n    .tie-icon-add-button.icon-polygon .tui-image-editor-button[data-icontype=\"icon-polygon\"] label,\n    .tie-icon-add-button.icon-star .tui-image-editor-button[data-icontype=\"icon-star\"] label,\n    .tie-icon-add-button.icon-star-2 .tui-image-editor-button[data-icontype=\"icon-star-2\"] label,\n    .tie-icon-add-button.icon-arrow-3 .tui-image-editor-button[data-icontype=\"icon-arrow-3\"] label,\n    .tie-icon-add-button.icon-arrow-2 .tui-image-editor-button[data-icontype=\"icon-arrow-2\"] label,\n    .tie-icon-add-button.icon-arrow .tui-image-editor-button[data-icontype=\"icon-arrow\"] label,\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"] label,\n    .tie-draw-line-select-button.line .tui-image-editor-button.line label,\n    .tie-draw-line-select-button.free .tui-image-editor-button.free label,\n    .tie-flip-button.flipX .tui-image-editor-button.flipX label,\n    .tie-flip-button.flipY .tui-image-editor-button.flipY label,\n    .tie-flip-button.resetFlip .tui-image-editor-button.resetFlip label,\n    .tie-crop-button .tui-image-editor-button.apply.active label,\n    .tie-crop-preset-button .tui-image-editor-button.preset.active label,\n    .tie-shape-button.rect .tui-image-editor-button.rect label,\n    .tie-shape-button.circle .tui-image-editor-button.circle label,\n    .tie-shape-button.triangle .tui-image-editor-button.triangle label,\n    .tie-text-effect-button .tui-image-editor-button.active label,\n    .tie-text-align-button.left .tui-image-editor-button.left label,\n    .tie-text-align-button.center .tui-image-editor-button.center label,\n    .tie-text-align-button.right .tui-image-editor-button.right label,\n    .tie-mask-apply.apply.active .tui-image-editor-button.apply label,\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button:hover > label,\n    .tui-image-editor-container .tui-image-editor-checkbox label > span {\n        " + subMenuLabelActive + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button > label,\n    .tui-image-editor-container .tui-image-editor-range-wrap.tui-image-editor-newline.short label,\n    .tui-image-editor-container .tui-image-editor-range-wrap.tui-image-editor-newline.short label > span {\n        " + subMenuLabelNormal + "\n    }\n    .tui-image-editor-container .tui-image-editor-range-wrap label > span {\n        " + subMenuRangeTitle + "\n    }\n    .tui-image-editor-container .tui-image-editor-partition > div {\n        " + submenuPartitionVertical + "\n    }\n    .tui-image-editor-container.left .tui-image-editor-submenu .tui-image-editor-partition > div,\n    .tui-image-editor-container.right .tui-image-editor-submenu .tui-image-editor-partition > div {\n        " + submenuPartitionHorizontal + "\n    }\n    .tui-image-editor-container .tui-image-editor-checkbox label > span:before {\n        " + submenuCheckbox + "\n    }\n    .tui-image-editor-container .tui-image-editor-checkbox label > input:checked + span:before {\n        border: 0;\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-pointer {\n        " + submenuRangePointer + "\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-bar {\n        " + submenuRangeBar + "\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-subbar {\n        " + submenuRangeSubbar + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-pointer {\n        " + submenuDisabledRangePointer + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-subbar {\n        " + submenuDisabledRangeSubbar + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-bar {\n        " + submenuDisabledRangeBar + "\n    }\n    .tui-image-editor-container .tui-image-editor-range-value {\n        " + submenuRangeValue + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button .color-picker-value + label {\n        " + submenuColorpickerTitle + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button .color-picker-value {\n        " + submenuColorpickerButton + "\n    }\n    .tui-image-editor-container .svg_ic-menu {\n        " + menuIconSize + "\n    }\n    .tui-image-editor-container .svg_ic-submenu {\n        " + submenuIconSize + "\n    }\n    .tui-image-editor-container .tui-image-editor-controls-logo > img,\n    .tui-image-editor-container .tui-image-editor-header-logo > img {\n        " + biSize + "\n    }\n\n";
+	    return "\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"],\n    .tie-icon-add-button.icon-heart .tui-image-editor-button[data-icontype=\"icon-heart\"],\n    .tie-icon-add-button.icon-location .tui-image-editor-button[data-icontype=\"icon-location\"],\n    .tie-icon-add-button.icon-polygon .tui-image-editor-button[data-icontype=\"icon-polygon\"],\n    .tie-icon-add-button.icon-star .tui-image-editor-button[data-icontype=\"icon-star\"],\n    .tie-icon-add-button.icon-star-2 .tui-image-editor-button[data-icontype=\"icon-star-2\"],\n    .tie-icon-add-button.icon-arrow-3 .tui-image-editor-button[data-icontype=\"icon-arrow-3\"],\n    .tie-icon-add-button.icon-arrow-2 .tui-image-editor-button[data-icontype=\"icon-arrow-2\"],\n    .tie-icon-add-button.icon-arrow .tui-image-editor-button[data-icontype=\"icon-arrow\"],\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"],\n    .tie-draw-line-select-button.line .tui-image-editor-button.line,\n    .tie-draw-line-select-button.free .tui-image-editor-button.free,\n    .tie-measure-baseline-button .tui-image-editor-button.selected,\n    .tie-measure-line-button .tui-image-editor-button.selected,\n    .tie-flip-button.flipX .tui-image-editor-button.flipX,\n    .tie-flip-button.flipY .tui-image-editor-button.flipY,\n    .tie-flip-button.resetFlip .tui-image-editor-button.resetFlip,\n    .tie-crop-button .tui-image-editor-button.apply.active,\n    .tie-crop-preset-button .tui-image-editor-button.preset.active,\n    .tie-shape-button.rect .tui-image-editor-button.rect,\n    .tie-shape-button.circle .tui-image-editor-button.circle,\n    .tie-shape-button.triangle .tui-image-editor-button.triangle,\n    .tie-text-effect-button .tui-image-editor-button.active,\n    .tie-text-align-button.left .tui-image-editor-button.left,\n    .tie-text-align-button.center .tui-image-editor-button.center,\n    .tie-text-align-button.right .tui-image-editor-button.right,\n    .tie-mask-apply.apply.active .tui-image-editor-button.apply,\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button:hover {\n        background-color: lightgray;\n    }\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"] label,\n    .tie-icon-add-button.icon-heart .tui-image-editor-button[data-icontype=\"icon-heart\"] label,\n    .tie-icon-add-button.icon-location .tui-image-editor-button[data-icontype=\"icon-location\"] label,\n    .tie-icon-add-button.icon-polygon .tui-image-editor-button[data-icontype=\"icon-polygon\"] label,\n    .tie-icon-add-button.icon-star .tui-image-editor-button[data-icontype=\"icon-star\"] label,\n    .tie-icon-add-button.icon-star-2 .tui-image-editor-button[data-icontype=\"icon-star-2\"] label,\n    .tie-icon-add-button.icon-arrow-3 .tui-image-editor-button[data-icontype=\"icon-arrow-3\"] label,\n    .tie-icon-add-button.icon-arrow-2 .tui-image-editor-button[data-icontype=\"icon-arrow-2\"] label,\n    .tie-icon-add-button.icon-arrow .tui-image-editor-button[data-icontype=\"icon-arrow\"] label,\n    .tie-icon-add-button.icon-bubble .tui-image-editor-button[data-icontype=\"icon-bubble\"] label,\n    .tie-draw-line-select-button.line .tui-image-editor-button.line label,\n    .tie-draw-line-select-button.free .tui-image-editor-button.free label,\n    .tie-measure-baseline-button .tui-image-editor-button.baseline.selected > label,\n    .tie-measure-line-button .tui-image-editor-button.line.selected > label,\n    .tie-flip-button.flipX .tui-image-editor-button.flipX label,\n    .tie-flip-button.flipY .tui-image-editor-button.flipY label,\n    .tie-flip-button.resetFlip .tui-image-editor-button.resetFlip label,\n    .tie-crop-button .tui-image-editor-button.apply.active label,\n    .tie-crop-preset-button .tui-image-editor-button.preset.active label,\n    .tie-shape-button.rect .tui-image-editor-button.rect label,\n    .tie-shape-button.circle .tui-image-editor-button.circle label,\n    .tie-shape-button.triangle .tui-image-editor-button.triangle label,\n    .tie-text-effect-button .tui-image-editor-button.active label,\n    .tie-text-align-button.left .tui-image-editor-button.left label,\n    .tie-text-align-button.center .tui-image-editor-button.center label,\n    .tie-text-align-button.right .tui-image-editor-button.right label,\n    .tie-mask-apply.apply.active .tui-image-editor-button.apply label,\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button:hover > label,\n    .tui-image-editor-container .tui-image-editor-checkbox label > span {\n        " + subMenuLabelActive + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button > label,\n    .tui-image-editor-container .tui-image-editor-range-wrap.tui-image-editor-newline.short label,\n    .tui-image-editor-container .tui-image-editor-range-wrap.tui-image-editor-newline.short label > span {\n        " + subMenuLabelNormal + "\n    }\n    .tui-image-editor-container .tui-image-editor-range-wrap label > span {\n        " + subMenuRangeTitle + "\n    }\n    .tui-image-editor-container .tui-image-editor-partition > div {\n        " + submenuPartitionVertical + "\n    }\n    .tui-image-editor-container.left .tui-image-editor-submenu .tui-image-editor-partition > div,\n    .tui-image-editor-container.right .tui-image-editor-submenu .tui-image-editor-partition > div {\n        " + submenuPartitionHorizontal + "\n    }\n    .tui-image-editor-container .tui-image-editor-checkbox label > span:before {\n        " + submenuCheckbox + "\n    }\n    .tui-image-editor-container .tui-image-editor-checkbox label > input:checked + span:before {\n        border: 0;\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-pointer {\n        " + submenuRangePointer + "\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-bar {\n        " + submenuRangeBar + "\n    }\n    .tui-image-editor-container .tui-image-editor-virtual-range-subbar {\n        " + submenuRangeSubbar + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-pointer {\n        " + submenuDisabledRangePointer + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-subbar {\n        " + submenuDisabledRangeSubbar + "\n    }\n    .tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-virtual-range-bar {\n        " + submenuDisabledRangeBar + "\n    }\n    .tui-image-editor-container .tui-image-editor-range-value {\n        " + submenuRangeValue + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button .color-picker-value + label {\n        " + submenuColorpickerTitle + "\n    }\n    .tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button .color-picker-value {\n        " + submenuColorpickerButton + "\n    }\n    .tui-image-editor-container .svg_ic-menu {\n        " + menuIconSize + "\n    }\n    .tui-image-editor-container .svg_ic-submenu {\n        " + submenuIconSize + "\n    }\n    .tui-image-editor-container .tui-image-editor-controls-logo > img,\n    .tui-image-editor-container .tui-image-editor-header-logo > img {\n        " + biSize + "\n    }\n\n";
 	};
 
 /***/ }),
@@ -9079,6 +9101,244 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _submenuBase = __webpack_require__(84);
+
+	var _submenuBase2 = _interopRequireDefault(_submenuBase);
+
+	var _measure = __webpack_require__(103);
+
+	var _measure2 = _interopRequireDefault(_measure);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import util from '../util';
+	// import Colorpicker from './tools/colorpicker';
+	// import Range from './tools/range';
+
+
+	// import {measureIconPath} from '../consts';
+	// const DRAW_OPACITY = 0.7;
+
+	/**
+	 * Measure ui class
+	 * @class
+	 * @ignore
+	 */
+	var Measure = function (_Submenu) {
+	    _inherits(Measure, _Submenu);
+
+	    function Measure(subMenuElement, _ref) {
+	        var locale = _ref.locale,
+	            iconStyle = _ref.iconStyle,
+	            menuBarPosition = _ref.menuBarPosition,
+	            usageStatistics = _ref.usageStatistics;
+
+	        _classCallCheck(this, Measure);
+
+	        var _this = _possibleConstructorReturn(this, (Measure.__proto__ || Object.getPrototypeOf(Measure)).call(this, subMenuElement, {
+	            locale: locale,
+	            name: 'measure',
+	            iconStyle: iconStyle,
+	            menuBarPosition: menuBarPosition,
+	            templateHtml: _measure2.default,
+	            usageStatistics: usageStatistics
+	        }));
+
+	        _this._els = {
+	            baselineButton: _this.selector('.tie-measure-baseline-button .tui-image-editor-button'),
+	            measureButton: _this.selector('.tie-measure-line-button .tui-image-editor-button')
+	            // lineSelectButton: this.selector('.tie-ruler-select-button'),
+	            // drawColorpicker: new Colorpicker(
+	            //     this.selector('.tie-ruler-color'), '#00a9ff', this.toggleDirection, this.usageStatistics
+	            // ),
+	            // drawRange: new Range(this.selector('.tie-ruler-range'), defaultDrawRangeValus),
+	            // drawRangeValue: this.selector('.tie-ruler-range-value')
+	        };
+
+	        // this.baselineInitialized = false;
+	        // this.type = null;
+	        // this.color = this._els.drawColorpicker.color;
+	        // this.width = this._els.drawRange.value;
+	        return _this;
+	    }
+
+	    /**
+	     * Add event for draw
+	     * @param {Object} actions - actions for crop
+	     *   @param {Function} actions.setDrawMode - set draw mode
+	     */
+
+
+	    _createClass(Measure, [{
+	        key: 'addEvent',
+	        value: function addEvent(actions) {
+	            this.actions = actions;
+
+	            this._els.baselineButton.addEventListener('click', this._drawBaselineHandler.bind(this));
+	            this._els.measureButton.addEventListener('click', this._addMeasureHandler.bind(this));
+
+	            // this._els.lineSelectButton.addEventListener('click', this._changeDrawType.bind(this));
+	            // this._els.drawColorpicker.on('change', this._changeDrawColor.bind(this));
+	            // this._els.drawRange.on('change', this._changeDrawRange.bind(this));
+	            // this._els.drawRangeValue.value = this._els.drawRange.value;
+	            // this._els.drawRangeValue.setAttribute('readonly', true);
+	        }
+
+	        /**
+	         * set draw mode - action runner
+	         */
+
+	    }, {
+	        key: 'setDrawMode',
+	        value: function setDrawMode() {}
+	        // this.actions.setDrawMode(this.type, {
+	        //     width: this.width,
+	        //     color: util.getRgb(this.color, DRAW_OPACITY)
+	        // });
+
+
+	        /**
+	         * Clear icon type
+	         */
+
+	    }, {
+	        key: 'clearIconType',
+	        value: function clearIconType() {}
+	        // this._els.addIconButton.classList.remove(this.iconType);
+	        // this.iconType = null;
+
+
+	        // /**
+	        //  * Register default icon
+	        //  */
+	        // registDefaultIcon() {
+	        //     snippet.forEach(measureIconPath, (path, type) => {
+	        //         this.actions.registDefalutIcons(type, path);
+	        //     });
+	        // }
+
+	        /**
+	         * Returns the menu to its default state.
+	         */
+
+	    }, {
+	        key: 'changeStandbyMode',
+	        value: function changeStandbyMode() {
+	            this.actions.stopDrawingMode();
+	            this.actions.changeSelectableAll(true);
+	        }
+	    }, {
+	        key: 'changeStandbyModeLine',
+	        value: function changeStandbyModeLine() {
+	            this.actions.stopDrawingMode();
+	            this.actions.changeSelectableAll(true);
+	            this._els.measureButton.classList.remove('selected');
+	        }
+
+	        /**
+	         * Executed when the menu starts.
+	         */
+
+	    }, {
+	        key: 'changeStartMode',
+	        value: function changeStartMode() {}
+	        // this.type = 'free';
+	        // this._els.lineSelectButton.classList.add('free');
+	        // this.setDrawMode();
+
+
+	        /**
+	         * Draw baseline event
+	         */
+
+	    }, {
+	        key: '_drawBaselineHandler',
+	        value: function _drawBaselineHandler() {
+	            this._els.baselineButton.classList.toggle('selected');
+
+	            if (this._els.baselineButton.classList.contains('selected')) {
+	                this.actions.setMeasureMode('baseline');
+	            } else {
+	                this.changeStandbyMode();
+	                this.actions.setMeasureBaselineToggle(false);
+	            }
+	        }
+	    }, {
+	        key: 'baselineButtonToggle',
+	        value: function baselineButtonToggle(flag) {
+	            if (flag) {
+	                this._els.baselineButton.classList.add('selected');
+	                this._els.measureButton.classList.add('selected');
+	            } else {
+	                this._els.baselineButton.classList.remove('selected');
+	                this._els.measureButton.classList.remove('selected');
+	            }
+	        }
+
+	        /**
+	         * Draw measureline event
+	         */
+
+	    }, {
+	        key: '_addMeasureHandler',
+	        value: function _addMeasureHandler() {
+	            this._els.measureButton.classList.toggle('selected');
+
+	            if (this._els.measureButton.classList.contains('selected')) {
+	                this.actions.discardSelection();
+	                this.actions.changeSelectableAll(false);
+	                this.actions.setMeasureMode('measureline');
+	            } else {
+	                this.changeStandbyModeLine();
+	            }
+	        }
+	    }]);
+
+	    return Measure;
+	}(_submenuBase2.default);
+
+	exports.default = Measure;
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	 * @param {Locale} locale - Translate text
+	 * @param {Object} normal - iconStyle
+	 * @param {Object} active - iconStyle
+	 * @returns {string}
+	 */
+	exports.default = function (_ref) {
+	    var locale = _ref.locale,
+	        _ref$iconStyle = _ref.iconStyle,
+	        normal = _ref$iconStyle.normal,
+	        active = _ref$iconStyle.active;
+	    return '\n    <ul class="tui-image-editor-submenu-item">\n        <li>\n            <div>1. Set a baseline(10mm)</div>\n            <div class="tie-measure-baseline-button">\n                <div class="tui-image-editor-button baseline">\n                    <div>\n                        <svg class="svg_ic-submenu">\n                            <use xlink:href="' + normal.path + '#' + normal.name + '-ic-baseline" class="normal"/>\n                            <use xlink:href="' + active.path + '#' + active.name + '-ic-baseline" class="active"/>\n                        </svg>\n                    </div>\n                    <label>\n                        ' + locale.localize('Baseline') + '\n                    </label>\n                </div>\n            </div>\n        </li>\n        <li class="tui-image-editor-partition">\n            <div></div>\n        </li>\n        <li>\n            <div>2. Measure the length with a line</div>\n            <div class="tie-measure-line-button">\n                <div class="tui-image-editor-button line">\n                    <div>\n                        <svg class="svg_ic-submenu">\n                            <use xlink:href="' + normal.path + '#' + normal.name + '-ic-measure-line" class="normal"/>\n                            <use xlink:href="' + active.path + '#' + active.name + '-ic-measure-line" class="active"/>\n                        </svg>\n                    </div>\n                    <label>\n                        ' + locale.localize('Line') + '\n                    </label>\n                </div>\n            </div>\n        </li>\n    </ul>\n';
+	};
+
+/***/ }),
+/* 104 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -9121,7 +9381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Locale;
 
 /***/ }),
-/* 103 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9136,7 +9396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _imagetracer = __webpack_require__(104);
+	var _imagetracer = __webpack_require__(106);
 
 	var _imagetracer2 = _interopRequireDefault(_imagetracer);
 
@@ -9160,7 +9420,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            mask: this._maskAction(),
 	            draw: this._drawAction(),
 	            icon: this._iconAction(),
-	            filter: this._filterAction()
+	            filter: this._filterAction(),
+	            measure: this._measureAction()
 	        };
 	    },
 
@@ -9192,6 +9453,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var resetFilterValue = function resetFilterValue() {
 	            _this.ui.filter.resetRangeValue();
 	        };
+	        var resetBaseline = function resetBaseline() {
+	            _this.setMeasureInit();
+	            // this.ui.measure.baselineInitialized = false;
+	        };
 
 	        return (0, _tuiCodeSnippet.extend)({
 	            initLoadImage: function initLoadImage(imagePath, imageName) {
@@ -9217,6 +9482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            reset: function reset() {
 	                exitCropOnAction();
 	                resetFilterValue();
+	                resetBaseline();
 	                _this.loadImageFromURL(_this.ui.initializeImgUrl, 'resetImage').then(function (sizeValue) {
 	                    exitCropOnAction();
 	                    _this.ui.resizeEditor({ imageSize: sizeValue }).then(function () {
@@ -9245,6 +9511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this.ui.initializeImgUrl = URL.createObjectURL(file);
 	                _this.loadImageFromFile(file).then(function (sizeValue) {
 	                    exitCropOnAction();
+	                    // resetBaseline();
 	                    _this.clearUndoStack();
 	                    _this.ui.activeMenuEvent();
 	                    _this.ui.resizeEditor({ imageSize: sizeValue });
@@ -9580,112 +9847,147 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    /**
+	     * Measure Action
+	     * @returns {Object} actions for ui measure
+	     * @private
+	     */
+	    _measureAction: function _measureAction() {
+	        var _this11 = this;
+
+	        return (0, _tuiCodeSnippet.extend)({
+	            setMeasureMode: function setMeasureMode(type, settings) {
+	                _this11.stopDrawingMode();
+	                if (type === 'baseline') {
+	                    _this11.startDrawingMode('MEASURE_BASELINE', settings);
+	                } else {
+	                    _this11.startDrawingMode('MEASURE_LINE', settings);
+	                }
+	            },
+	            setMeasureBaselineToggle: function setMeasureBaselineToggle(flag) {
+	                _this11.setMeasureBaselineToggle(flag);
+	            }
+	            // setColor: color => {
+	            //     this.setBrush({
+	            //         color
+	            //     });
+	            // }
+	        }, this._commonAction());
+	    },
+
+
+	    /**
 	     * Image Editor Event Observer
 	     */
 	    setReAction: function setReAction() {
-	        var _this11 = this;
+	        var _this12 = this;
 
 	        this.on({
 	            undoStackChanged: function undoStackChanged(length) {
 	                if (length) {
-	                    _this11.ui.changeUndoButtonStatus(true);
-	                    _this11.ui.changeResetButtonStatus(true);
-	                    _this11.options.onChangeResetStatus(true);
+	                    _this12.ui.changeUndoButtonStatus(true);
+	                    _this12.ui.changeResetButtonStatus(true);
+	                    _this12.options.onChangeResetStatus(true);
 	                } else {
-	                    _this11.ui.changeUndoButtonStatus(false);
-	                    _this11.ui.changeResetButtonStatus(false);
-	                    _this11.options.onChangeResetStatus(false);
+	                    _this12.ui.changeUndoButtonStatus(false);
+	                    _this12.ui.changeResetButtonStatus(false);
+	                    _this12.options.onChangeResetStatus(false);
 	                }
-	                _this11.ui.resizeEditor();
+	                _this12.ui.resizeEditor();
 	            },
 	            redoStackChanged: function redoStackChanged(length) {
 	                if (length) {
-	                    _this11.ui.changeRedoButtonStatus(true);
+	                    _this12.ui.changeRedoButtonStatus(true);
 	                } else {
-	                    _this11.ui.changeRedoButtonStatus(false);
+	                    _this12.ui.changeRedoButtonStatus(false);
 	                }
-	                _this11.ui.resizeEditor();
+	                _this12.ui.resizeEditor();
 	            },
 	            /* eslint-disable complexity */
 	            objectActivated: function objectActivated(obj) {
-	                _this11.activeObjectId = obj.id;
+	                _this12.activeObjectId = obj.id;
 
-	                _this11.ui.changeDeleteButtonEnabled(true);
-	                _this11.ui.changeDeleteAllButtonEnabled(true);
+	                _this12.ui.changeDeleteButtonEnabled(true);
+	                _this12.ui.changeDeleteAllButtonEnabled(true);
 
 	                if (obj.type === 'cropzone') {
-	                    _this11.ui.crop.changeApplyButtonStatus(true);
+	                    _this12.ui.crop.changeApplyButtonStatus(true);
 	                } else if (['rect', 'circle', 'triangle'].indexOf(obj.type) > -1) {
-	                    _this11.stopDrawingMode();
-	                    if (_this11.ui.submenu !== 'shape') {
-	                        _this11.ui.changeMenu('shape', false, false);
+	                    _this12.stopDrawingMode();
+	                    if (_this12.ui.submenu !== 'shape') {
+	                        _this12.ui.changeMenu('shape', false, false);
 	                    }
-	                    _this11.ui.shape.setShapeStatus({
+	                    _this12.ui.shape.setShapeStatus({
 	                        strokeColor: obj.stroke,
 	                        strokeWidth: obj.strokeWidth,
 	                        fillColor: obj.fill
 	                    });
 
-	                    _this11.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
+	                    _this12.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
 	                } else if (obj.type === 'path' || obj.type === 'line') {
-	                    if (_this11.ui.submenu !== 'draw') {
-	                        _this11.ui.changeMenu('draw', false, false);
-	                        _this11.ui.draw.changeStandbyMode();
+	                    if (_this12.ui.submenu !== 'draw') {
+	                        _this12.ui.changeMenu('draw', false, false);
+	                        _this12.ui.draw.changeStandbyMode();
 	                    }
 	                } else if (['i-text', 'text'].indexOf(obj.type) > -1) {
-	                    if (_this11.ui.submenu !== 'text') {
-	                        _this11.ui.changeMenu('text', false, false);
+	                    if (_this12.ui.submenu !== 'text') {
+	                        _this12.ui.changeMenu('text', false, false);
 	                    }
 	                } else if (obj.type === 'icon') {
-	                    _this11.stopDrawingMode();
-	                    if (_this11.ui.submenu !== 'icon') {
-	                        _this11.ui.changeMenu('icon', false, false);
+	                    _this12.stopDrawingMode();
+	                    if (_this12.ui.submenu !== 'icon') {
+	                        _this12.ui.changeMenu('icon', false, false);
 	                    }
-	                    _this11.ui.icon.setIconPickerColor(obj.fill);
+	                    _this12.ui.icon.setIconPickerColor(obj.fill);
+	                } else if (obj.type.startsWith('measure')) {
+	                    if (_this12.ui.submenu !== 'measure') {
+	                        _this12.ui.changeMenu('measure', false, false);
+	                    }
 	                }
 	            },
 	            /* eslint-enable complexity */
 	            addText: function addText(pos) {
-	                _this11.addText('Double Click', {
+	                _this12.addText('Double Click', {
 	                    position: pos.originPosition,
 	                    styles: {
-	                        fill: _this11.ui.text.textColor,
-	                        fontSize: _util2.default.toInteger(_this11.ui.text.fontSize),
+	                        fill: _this12.ui.text.textColor,
+	                        fontSize: _util2.default.toInteger(_this12.ui.text.fontSize),
 	                        fontFamily: 'Noto Sans'
 	                    }
 	                }).then(function () {
-	                    _this11.changeCursor('default');
+	                    _this12.changeCursor('default');
 	                });
 	            },
 	            addObjectAfter: function addObjectAfter(obj) {
 	                if (['rect', 'circle', 'triangle'].indexOf(obj.type) > -1) {
-	                    _this11.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
-	                    _this11.ui.shape.changeStandbyMode();
+	                    _this12.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
+	                    _this12.ui.shape.changeStandbyMode();
+	                } else if (obj.type.startsWith('measure')) {
+	                    _this12.ui.measure.changeStandbyModeLine();
 	                }
 	            },
 	            objectScaled: function objectScaled(obj) {
 	                if (['i-text', 'text'].indexOf(obj.type) > -1) {
-	                    _this11.ui.text.fontSize = _util2.default.toInteger(obj.fontSize);
+	                    _this12.ui.text.fontSize = _util2.default.toInteger(obj.fontSize);
 	                } else if (['rect', 'circle', 'triangle'].indexOf(obj.type) >= 0) {
 	                    var width = obj.width,
 	                        height = obj.height;
 
-	                    var strokeValue = _this11.ui.shape.getStrokeValue();
+	                    var strokeValue = _this12.ui.shape.getStrokeValue();
 
 	                    if (width < strokeValue) {
-	                        _this11.ui.shape.setStrokeValue(width);
+	                        _this12.ui.shape.setStrokeValue(width);
 	                    }
 	                    if (height < strokeValue) {
-	                        _this11.ui.shape.setStrokeValue(height);
+	                        _this12.ui.shape.setStrokeValue(height);
 	                    }
 	                }
 	            },
 	            selectionCleared: function selectionCleared() {
-	                _this11.activeObjectId = null;
-	                if (_this11.ui.submenu === 'text') {
-	                    _this11.changeCursor('text');
-	                } else if (_this11.ui.submenu !== 'draw' && _this11.ui.submenu !== 'crop') {
-	                    _this11.stopDrawingMode();
+	                _this12.activeObjectId = null;
+	                if (_this12.ui.submenu === 'text') {
+	                    _this12.changeCursor('text');
+	                } else if (_this12.ui.submenu !== 'draw' && _this12.ui.submenu !== 'crop') {
+	                    _this12.stopDrawingMode();
 	                }
 	            }
 	        });
@@ -9698,20 +10000,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    _commonAction: function _commonAction() {
-	        var _this12 = this;
+	        var _this13 = this;
 
 	        return {
 	            modeChange: function modeChange(menu) {
 	                switch (menu) {
 	                    case 'text':
-	                        _this12._changeActivateMode('TEXT');
+	                        _this13._changeActivateMode('TEXT');
 	                        break;
 	                    case 'crop':
-	                        _this12.startDrawingMode('CROPPER');
+	                        _this13.startDrawingMode('CROPPER');
 	                        break;
 	                    case 'shape':
-	                        _this12._changeActivateMode('SHAPE');
-	                        _this12.setDrawingShape(_this12.ui.shape.type, _this12.ui.shape.options);
+	                        _this13._changeActivateMode('SHAPE');
+	                        _this13.setDrawingShape(_this13.ui.shape.type, _this13.ui.shape.options);
 	                        break;
 	                    default:
 	                        break;
@@ -9735,7 +10037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -10889,7 +11191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ImageTracer;
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10908,69 +11210,85 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
-	var _imageLoader = __webpack_require__(107);
+	var _imageLoader = __webpack_require__(109);
 
 	var _imageLoader2 = _interopRequireDefault(_imageLoader);
 
-	var _cropper = __webpack_require__(109);
+	var _cropper = __webpack_require__(111);
 
 	var _cropper2 = _interopRequireDefault(_cropper);
 
-	var _flip = __webpack_require__(111);
+	var _flip = __webpack_require__(113);
 
 	var _flip2 = _interopRequireDefault(_flip);
 
-	var _rotation = __webpack_require__(112);
+	var _rotation = __webpack_require__(114);
 
 	var _rotation2 = _interopRequireDefault(_rotation);
 
-	var _freeDrawing = __webpack_require__(113);
+	var _freeDrawing = __webpack_require__(115);
 
 	var _freeDrawing2 = _interopRequireDefault(_freeDrawing);
 
-	var _line = __webpack_require__(114);
+	var _line = __webpack_require__(116);
 
 	var _line2 = _interopRequireDefault(_line);
 
-	var _text = __webpack_require__(115);
+	var _text = __webpack_require__(117);
 
 	var _text2 = _interopRequireDefault(_text);
 
-	var _icon = __webpack_require__(116);
+	var _icon = __webpack_require__(118);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
-	var _filter = __webpack_require__(117);
+	var _filter = __webpack_require__(119);
 
 	var _filter2 = _interopRequireDefault(_filter);
 
-	var _shape = __webpack_require__(123);
+	var _shape = __webpack_require__(125);
 
 	var _shape2 = _interopRequireDefault(_shape);
 
-	var _cropper3 = __webpack_require__(125);
+	var _measureBaseline = __webpack_require__(127);
+
+	var _measureBaseline2 = _interopRequireDefault(_measureBaseline);
+
+	var _measureLine = __webpack_require__(128);
+
+	var _measureLine2 = _interopRequireDefault(_measureLine);
+
+	var _cropper3 = __webpack_require__(129);
 
 	var _cropper4 = _interopRequireDefault(_cropper3);
 
-	var _freeDrawing3 = __webpack_require__(127);
+	var _freeDrawing3 = __webpack_require__(131);
 
 	var _freeDrawing4 = _interopRequireDefault(_freeDrawing3);
 
-	var _lineDrawing = __webpack_require__(128);
+	var _lineDrawing = __webpack_require__(132);
 
 	var _lineDrawing2 = _interopRequireDefault(_lineDrawing);
 
-	var _shape3 = __webpack_require__(129);
+	var _shape3 = __webpack_require__(133);
 
 	var _shape4 = _interopRequireDefault(_shape3);
 
-	var _text3 = __webpack_require__(130);
+	var _text3 = __webpack_require__(134);
 
 	var _text4 = _interopRequireDefault(_text3);
+
+	var _measureBaseline3 = __webpack_require__(135);
+
+	var _measureBaseline4 = _interopRequireDefault(_measureBaseline3);
+
+	var _measureLine3 = __webpack_require__(136);
+
+	var _measureLine4 = _interopRequireDefault(_measureLine3);
 
 	var _consts = __webpack_require__(73);
 
@@ -11028,7 +11346,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _ref$useItext = _ref.useItext,
 	            useItext = _ref$useItext === undefined ? false : _ref$useItext,
 	            _ref$useDragAddIcon = _ref.useDragAddIcon,
-	            useDragAddIcon = _ref$useDragAddIcon === undefined ? false : _ref$useDragAddIcon;
+	            useDragAddIcon = _ref$useDragAddIcon === undefined ? false : _ref$useDragAddIcon,
+	            measureInitPosition = _ref.measureInitPosition;
 
 	        _classCallCheck(this, Graphics);
 
@@ -11061,6 +11380,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @type {boolean}
 	         */
 	        this.useDragAddIcon = useDragAddIcon;
+
+	        this.measureInitPosition = measureInitPosition;
 
 	        /**
 	         * cropper Selection Style
@@ -11705,6 +12026,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function setDrawingShape(type, options) {
 	            this.getComponent(components.SHAPE).setStates(type, options);
 	        }
+	    }, {
+	        key: 'setMeasureInit',
+	        value: function setMeasureInit(baselinePoints) {
+	            this.getComponent(components.MEASURE_BASELINE).setInit(baselinePoints);
+	            this.getComponent(components.MEASURE_LINE).setInit();
+	        }
+	    }, {
+	        key: 'setMeasureBaselineToggle',
+	        value: function setMeasureBaselineToggle(flag) {
+	            this.getComponent(components.MEASURE_BASELINE).setVisible(flag);
+	        }
+	    }, {
+	        key: 'getMeasureBaselinePoints',
+	        value: function getMeasureBaselinePoints() {
+	            return this.getComponent(components.MEASURE_BASELINE).getBaseline();
+	        }
+	    }, {
+	        key: 'recalcMeasurelines',
+	        value: function recalcMeasurelines(length) {
+	            this.getComponent(components.MEASURE_LINE).recalcMeasurelines(length);
+	        }
 
 	        /**
 	         * Register icon paths
@@ -11953,6 +12295,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._register(this._drawingModeMap, new _lineDrawing2.default());
 	            this._register(this._drawingModeMap, new _shape4.default());
 	            this._register(this._drawingModeMap, new _text4.default());
+	            this._register(this._drawingModeMap, new _measureBaseline4.default());
+	            this._register(this._drawingModeMap, new _measureLine4.default());
 	        }
 
 	        /**
@@ -11973,6 +12317,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._register(this._componentMap, new _icon2.default(this));
 	            this._register(this._componentMap, new _filter2.default(this));
 	            this._register(this._componentMap, new _shape2.default(this));
+	            this._register(this._componentMap, new _measureBaseline2.default(this));
+	            this._register(this._componentMap, new _measureLine2.default(this));
 	        }
 
 	        /**
@@ -12314,13 +12660,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Graphics;
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_106__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_108__;
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12331,7 +12677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -12452,7 +12798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ImageLoader;
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -12637,7 +12983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Component;
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12648,15 +12994,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
-	var _cropzone = __webpack_require__(110);
+	var _cropzone = __webpack_require__(112);
 
 	var _cropzone2 = _interopRequireDefault(_cropzone);
 
@@ -13097,7 +13443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Cropper;
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13106,7 +13452,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -13575,7 +13921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Cropzone;
 
 /***/ }),
-/* 111 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13590,7 +13936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -13784,14 +14130,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Flip;
 
 /***/ }),
-/* 112 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -13799,7 +14145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -13931,18 +14277,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Rotation;
 
 /***/ }),
-/* 113 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -14044,18 +14390,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FreeDrawing;
 
 /***/ }),
-/* 114 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -14268,14 +14614,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Line;
 
 /***/ }),
-/* 115 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -14287,7 +14633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -15058,14 +15404,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Text;
 
 /***/ }),
-/* 116 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15077,7 +15423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -15280,7 +15626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Icon;
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15293,15 +15639,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
-	var _mask = __webpack_require__(118);
+	var _mask = __webpack_require__(120);
 
 	var _mask2 = _interopRequireDefault(_mask);
 
@@ -15309,19 +15655,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _consts2 = _interopRequireDefault(_consts);
 
-	var _blur = __webpack_require__(119);
+	var _blur = __webpack_require__(121);
 
 	var _blur2 = _interopRequireDefault(_blur);
 
-	var _sharpen = __webpack_require__(120);
+	var _sharpen = __webpack_require__(122);
 
 	var _sharpen2 = _interopRequireDefault(_sharpen);
 
-	var _emboss = __webpack_require__(121);
+	var _emboss = __webpack_require__(123);
 
 	var _emboss2 = _interopRequireDefault(_emboss);
 
-	var _colorFilter = __webpack_require__(122);
+	var _colorFilter = __webpack_require__(124);
 
 	var _colorFilter2 = _interopRequireDefault(_colorFilter);
 
@@ -15606,12 +15952,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Filter;
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15722,12 +16068,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Mask;
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15764,12 +16110,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Blur;
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15806,12 +16152,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Sharpen;
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15848,12 +16194,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Emboss;
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15968,14 +16314,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ColorFilter;
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _fabric = __webpack_require__(106);
+	var _fabric = __webpack_require__(108);
 
 	var _fabric2 = _interopRequireDefault(_fabric);
 
@@ -15983,7 +16329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _component = __webpack_require__(108);
+	var _component = __webpack_require__(110);
 
 	var _component2 = _interopRequireDefault(_component);
 
@@ -15991,7 +16337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _consts2 = _interopRequireDefault(_consts);
 
-	var _shapeResizeHelper = __webpack_require__(124);
+	var _shapeResizeHelper = __webpack_require__(126);
 
 	var _shapeResizeHelper2 = _interopRequireDefault(_shapeResizeHelper);
 
@@ -16487,7 +16833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Shape;
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -16750,14 +17096,868 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _drawingMode = __webpack_require__(126);
+	var _fabric = __webpack_require__(108);
+
+	var _fabric2 = _interopRequireDefault(_fabric);
+
+	var _component = __webpack_require__(110);
+
+	var _component2 = _interopRequireDefault(_component);
+
+	var _consts = __webpack_require__(73);
+
+	var _consts2 = _interopRequireDefault(_consts);
+
+	var _tuiCodeSnippet = __webpack_require__(3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Team <dl_javascript@nhn.com>
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Free drawing module, Set brush
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var eventNames = _consts2.default.eventNames;
+
+	/**
+	 * Measure Baseline
+	 * @class Line
+	 * @param {Graphics} graphics - Graphics instance
+	 * @extends {Component}
+	 * @ignore
+	 */
+
+	var MeasureBaseline = function (_Component) {
+	    _inherits(MeasureBaseline, _Component);
+
+	    function MeasureBaseline(graphics) {
+	        _classCallCheck(this, MeasureBaseline);
+
+	        /**
+	         * Brush width
+	         * @type {number}
+	         * @private
+	         */
+	        var _this = _possibleConstructorReturn(this, (MeasureBaseline.__proto__ || Object.getPrototypeOf(MeasureBaseline)).call(this, _consts2.default.componentNames.MEASURE_BASELINE, graphics));
+
+	        _this._width = 20;
+
+	        /**
+	         * fabric.Color instance for brush color
+	         * @type {fabric.Color}
+	         * @private
+	         */
+	        _this._oColor = new _fabric2.default.Color('rgba(255, 112, 112, 0.8)');
+	        _this._pColor = new _fabric2.default.Color('rgba(255, 112, 112, 1)');
+
+	        _this._initialized = false;
+	        _this._initialPosition = graphics.measureInitPosition;
+	        _this._createBaselineObjects();
+	        return _this;
+	    }
+
+	    /**
+	     * Start drawing line mode
+	     * @param {{width: ?number, color: ?string}} [setting] - Brush width & color
+	     */
+
+
+	    _createClass(MeasureBaseline, [{
+	        key: 'start',
+	        value: function start() {
+	            var canvas = this.getCanvas();
+	            canvas.defaultCursor = 'default';
+
+	            canvas.forEachObject(function (obj) {
+	                obj.set({
+	                    evented: true
+	                });
+	            });
+
+	            if (this._initialized) {
+	                this.setVisible(true);
+	            } else {
+	                this._createBaseline();
+	            }
+	        }
+
+	        /**
+	         * End drawing line mode
+	         */
+
+	    }, {
+	        key: 'end',
+	        value: function end() {}
+	    }, {
+	        key: 'setInit',
+	        value: function setInit() {
+	            var initialPosition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	            this._initialized = false;
+	            this._initialPosition = initialPosition;
+	        }
+	    }, {
+	        key: 'setVisible',
+	        value: function setVisible(flag) {
+	            var canvas = this.getCanvas();
+	            this._start.set({
+	                visible: flag
+	            });
+	            this._end.set({
+	                visible: flag
+	            });
+	            this._line.set({
+	                visible: flag
+	            });
+	            this._text.set({
+	                visible: flag
+	            });
+	            canvas.renderAll();
+	        }
+	    }, {
+	        key: '_createBaselineObjects',
+	        value: function _createBaselineObjects() {
+	            var canvas = this.getCanvas();
+	            var width = canvas.width,
+	                height = canvas.height;
+
+	            var xlen = 300;
+	            var ylen = 300;
+	            var _initialPosition = this._initialPosition,
+	                _initialPosition$x = _initialPosition.x1,
+	                x1 = _initialPosition$x === undefined ? width / 2 - xlen : _initialPosition$x,
+	                _initialPosition$y = _initialPosition.y1,
+	                y1 = _initialPosition$y === undefined ? height / 2 - ylen : _initialPosition$y,
+	                _initialPosition$x2 = _initialPosition.x2,
+	                x2 = _initialPosition$x2 === undefined ? width / 2 + xlen : _initialPosition$x2,
+	                _initialPosition$y2 = _initialPosition.y2,
+	                y2 = _initialPosition$y2 === undefined ? height / 2 + ylen : _initialPosition$y2;
+
+
+	            var opts = {
+	                originX: 'center',
+	                originY: 'center',
+	                lockScalingX: true,
+	                lockScalingY: true,
+	                lockUniScaling: true,
+	                lockRotation: true,
+	                hasBorders: false,
+	                hasControls: false,
+	                type: 'measure_baseline'
+	            };
+	            this._start = new _fabric2.default.Triangle((0, _tuiCodeSnippet.extend)({
+	                left: x1,
+	                top: y1,
+	                width: this._width * 3,
+	                height: this._width * 3,
+	                fill: this._pColor.toRgba(),
+	                padding: this._width * 2
+	            }, opts));
+
+	            this._end = new _fabric2.default.Triangle((0, _tuiCodeSnippet.extend)({
+	                left: x2,
+	                top: y2,
+	                width: this._width * 3,
+	                height: this._width * 3,
+	                fill: this._pColor.toRgba(),
+	                padding: this._width * 2,
+	                angle: 180
+	            }, opts));
+
+	            var startPoint = this._start.getCenterPoint();
+	            var endPoint = this._end.getCenterPoint();
+	            var points = [startPoint.x, startPoint.y, endPoint.x, endPoint.y];
+
+	            this._line = new _fabric2.default.Line(points, (0, _tuiCodeSnippet.extend)(opts, {
+	                stroke: this._oColor.toRgba(),
+	                strokeWidth: this._width,
+	                hasBorders: true,
+	                borderColor: 'rgba(255,255,255,0.5)',
+	                borderScaleFactor: '5'
+	            }));
+
+	            this._line.start = this._start;
+	            this._line.end = this._end;
+
+	            canvas.add(this._line, this._start, this._end);
+	        }
+	    }, {
+	        key: '_createBaseline',
+	        value: function _createBaseline() {
+	            var canvas = this.getCanvas();
+
+	            this._createBaselineObjects();
+
+	            var startPoint = this._start.getCenterPoint();
+	            var endPoint = this._end.getCenterPoint();
+
+	            this._moveTriangle(startPoint, endPoint);
+
+	            var param1 = this.graphics.createObjectProperties(this._line);
+	            var param2 = this.graphics.createObjectProperties(this._start);
+	            var param3 = this.graphics.createObjectProperties(this._end);
+
+	            this.fire(eventNames.ADD_OBJECT, param1);
+	            this.fire(eventNames.ADD_OBJECT, param2);
+	            this.fire(eventNames.ADD_OBJECT, param3);
+
+	            this._initialized = true;
+	            var self = this;
+
+	            this._start.on({
+	                moving: function moving(fEvent) {
+	                    var pointer = canvas.getPointer(fEvent.e);
+	                    var endPointer = {
+	                        x: self._end.left,
+	                        y: self._end.top
+	                    };
+
+	                    self._moveTriangle(pointer, endPointer);
+	                },
+	                moved: function moved() {
+	                    self.recalcMeasurelines();
+	                }
+	            });
+	            this._end.on({
+	                moving: function moving(fEvent) {
+	                    var pointer = canvas.getPointer(fEvent.e);
+	                    var startPointer = {
+	                        x: self._start.left,
+	                        y: self._start.top
+	                    };
+
+	                    self._moveTriangle(startPointer, pointer);
+	                },
+	                moved: function moved() {
+	                    self.recalcMeasurelines();
+	                }
+	            });
+
+	            this._line.on({
+	                moving: function moving() {
+	                    var line = self._line;
+	                    var oldCenterX = (line.x1 + line.x2) / 2;
+	                    var oldCenterY = (line.y1 + line.y2) / 2;
+	                    var deltaX = line.left - oldCenterX;
+	                    var deltaY = line.top - oldCenterY;
+	                    var startPointer = {
+	                        x: line.x1 + deltaX,
+	                        y: line.y1 + deltaY
+	                    };
+	                    var endPointer = {
+	                        x: line.x2 + deltaX,
+	                        y: line.y2 + deltaY
+	                    };
+
+	                    self._moveTriangle(startPointer, endPointer);
+	                },
+	                moved: function moved() {
+	                    self.recalcMeasurelines();
+	                    canvas.discardActiveObject();
+	                    canvas.renderAll();
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'recalcMeasurelines',
+	        value: function recalcMeasurelines() {
+	            var _getBaseline = this.getBaseline(),
+	                length = _getBaseline.length;
+
+	            this.graphics.recalcMeasurelines(length);
+	        }
+	    }, {
+	        key: 'getBaseline',
+	        value: function getBaseline() {
+	            var _line = this._line,
+	                x1 = _line.x1,
+	                y1 = _line.y1,
+	                x2 = _line.x2,
+	                y2 = _line.y2;
+
+	            var length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) + this._width * 3;
+
+	            return {
+	                x1: x1,
+	                y1: y1,
+	                x2: x2,
+	                y2: y2,
+	                length: length
+	            };
+	        }
+	    }, {
+	        key: '_moveTriangle',
+	        value: function _moveTriangle(start, end) {
+	            var canvas = this.getCanvas();
+	            var angle = Math.atan2(end.y - start.y, end.x - start.x) * 180 / Math.PI;
+
+	            this._start.set({
+	                left: start.x,
+	                top: start.y,
+	                angle: angle - 90
+	            });
+
+	            this._end.set({
+	                left: end.x,
+	                top: end.y,
+	                angle: angle + 90
+	            });
+
+	            this._line.set({
+	                x1: start.x,
+	                y1: start.y,
+	                x2: end.x,
+	                y2: end.y
+	            });
+
+	            this._start.setCoords();
+	            this._end.setCoords();
+	            this._line.setCoords();
+	            canvas.renderAll();
+	        }
+	    }]);
+
+	    return MeasureBaseline;
+	}(_component2.default);
+
+	module.exports = MeasureBaseline;
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _fabric = __webpack_require__(108);
+
+	var _fabric2 = _interopRequireDefault(_fabric);
+
+	var _component = __webpack_require__(110);
+
+	var _component2 = _interopRequireDefault(_component);
+
+	var _consts = __webpack_require__(73);
+
+	var _consts2 = _interopRequireDefault(_consts);
+
+	var _tuiCodeSnippet = __webpack_require__(3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Team <dl_javascript@nhn.com>
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Free drawing module, Set brush
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var eventNames = _consts2.default.eventNames;
+	/**
+	 * Measure Baseline
+	 * @class Line
+	 * @param {Graphics} graphics - Graphics instance
+	 * @extends {Component}
+	 * @ignore
+	 */
+
+	var MeasureLine = function (_Component) {
+	    _inherits(MeasureLine, _Component);
+
+	    function MeasureLine(graphics) {
+	        _classCallCheck(this, MeasureLine);
+
+	        /**
+	         * Brush width
+	         * @type {number}
+	         * @private
+	         */
+	        var _this = _possibleConstructorReturn(this, (MeasureLine.__proto__ || Object.getPrototypeOf(MeasureLine)).call(this, _consts2.default.componentNames.MEASURE_LINE, graphics));
+
+	        _this._width = 20;
+	        _this._textWidth = 550;
+	        _this._textHeight = 100;
+	        _this._textPadding = 20;
+
+	        /**
+	         * fabric.Color instance for brush color
+	         * @type {fabric.Color}
+	         * @private
+	         */
+	        // this._oColor = new fabric.Color('#ff7070');
+	        _this._oColor = new _fabric2.default.Color('rgba(0, 255, 0, 0.5)');
+	        _this._pColor = new _fabric2.default.Color('rgba(0, 255, 0, 1)');
+	        /**
+	         * Listeners
+	         * @type {object.<string, function>}
+	         * @private
+	         */
+
+	        _this._lines = [];
+
+	        _this._listeners = {
+	            mousedown: _this._onFabricMouseDown.bind(_this),
+	            mousemove: _this._onFabricMouseMove.bind(_this),
+	            mouseup: _this._onFabricMouseUp.bind(_this)
+	        };
+
+	        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="64px" height="64px"><path fill="#00000042" d="M504.1,256C504.1,119,393,7.9,256,7.9C119,7.9,7.9,119,7.9,256C7.9,393,119,504.1,256,504.1C393,504.1,504.1,393,504.1,256z"/><path fill="#e0e0e0" d="M285,256l72.5-84.2c7.9-9.2,6.9-23-2.3-31c-9.2-7.9-23-6.9-30.9,2.3L256,222.4l-68.2-79.2c-7.9-9.2-21.8-10.2-31-2.3c-9.2,7.9-10.2,21.8-2.3,31L227,256l-72.5,84.2c-7.9,9.2-6.9,23,2.3,31c4.1,3.6,9.2,5.3,14.3,5.3c6.2,0,12.3-2.6,16.6-7.6l68.2-79.2l68.2,79.2c4.3,5,10.5,7.6,16.6,7.6c5.1,0,10.2-1.7,14.3-5.3c9.2-7.9,10.2-21.8,2.3-31L285,256z"/></svg>';
+
+	        _fabric2.default.loadSVGFromString(svg, function (object) {
+	            _this._icon = _fabric2.default.util.groupSVGElements(object, {
+	                left: _this._textWidth - _this._width,
+	                top: 0,
+	                originX: 'right',
+	                originY: 'center',
+	                height: _this._textHeight,
+	                type: 'measure_deleteIcon'
+	            });
+	        });
+	        return _this;
+	    }
+
+	    /**
+	     * Start drawing line mode
+	     * @param {{width: ?number, color: ?string}} [setting] - Brush width & color
+	     */
+
+
+	    _createClass(MeasureLine, [{
+	        key: 'start',
+	        value: function start() {
+	            var canvas = this.getCanvas();
+
+	            canvas.defaultCursor = 'crosshair';
+	            canvas.selection = false;
+
+	            this._line = null;
+	            this._start = null;
+	            this._end = null;
+	            this._text = null;
+
+	            canvas.forEachObject(function (obj) {
+	                obj.set({
+	                    evented: false
+	                });
+	            });
+
+	            canvas.on({
+	                'mouse:down': this._listeners.mousedown
+	            });
+	        }
+	    }, {
+	        key: 'end',
+	        value: function end() {
+	            var canvas = this.getCanvas();
+
+	            canvas.defaultCursor = 'default';
+	            canvas.selection = false;
+
+	            canvas.forEachObject(function (obj) {
+	                obj.set({
+	                    evented: true
+	                });
+	            });
+
+	            canvas.off('mouse:down', this._listeners.mousedown);
+	        }
+	    }, {
+	        key: 'setInit',
+	        value: function setInit() {
+	            this._lines = [];
+	        }
+
+	        /**
+	         * Mousedown event handler in fabric canvas
+	         * @param {{target: fabric.Object, e: MouseEvent}} fEvent - Fabric event object
+	         * @private
+	         */
+
+	    }, {
+	        key: '_onFabricMouseDown',
+	        value: function _onFabricMouseDown(fEvent) {
+	            var _this2 = this;
+
+	            var canvas = this.getCanvas();
+	            var pointer = canvas.getPointer(fEvent.e);
+
+	            if (this._line) {
+	                return;
+	            }
+
+	            var commOpts = {
+	                evented: false,
+	                originX: 'center',
+	                originY: 'center',
+	                lockScalingX: true,
+	                lockScalingY: true,
+	                lockUniScaling: true,
+	                lockRotation: true,
+	                hasBorders: false,
+	                hasControls: false,
+	                type: 'measure_line'
+	            };
+
+	            this._start = new _fabric2.default.Circle((0, _tuiCodeSnippet.extend)(commOpts, {
+	                left: pointer.x,
+	                top: pointer.y,
+	                radius: this._width * 1.5,
+	                fill: this._pColor.toRgba()
+	            }));
+
+	            this._end = new _fabric2.default.Circle((0, _tuiCodeSnippet.extend)(commOpts, {
+	                left: pointer.x,
+	                top: pointer.y,
+	                radius: this._width * 1.5,
+	                fill: this._pColor.toRgba()
+	            }));
+
+	            var startPoint = this._start.getCenterPoint();
+	            var points = [startPoint.x, startPoint.y, startPoint.x, startPoint.y];
+
+	            this._line = new _fabric2.default.Line(points, (0, _tuiCodeSnippet.extend)(commOpts, {
+	                stroke: this._oColor.toRgba(),
+	                strokeWidth: this._width,
+	                hasBorders: true,
+	                borderColor: 'rgba(255,255,255,0.5)',
+	                borderScaleFactor: '5'
+	            }));
+
+	            var bg = new _fabric2.default.Rect({
+	                fill: 'rgba(255,255,255,0.5)',
+	                originY: 'center',
+	                rx: this._textPadding,
+	                ry: this._textPadding,
+	                width: 0,
+	                height: this._textHeight + this._textPadding * 2
+	            });
+
+	            var text = new _fabric2.default.Text('', {
+	                fontSize: this._textHeight,
+	                originY: 'center',
+	                fill: 'black',
+	                left: this._textPadding,
+	                fontFamily: 'Noto Sans KR'
+	            });
+
+	            this._icon.clone(function (cloned) {
+	                _this2._text = new _fabric2.default.Group([bg, text, cloned], (0, _tuiCodeSnippet.extend)(commOpts, {
+	                    left: pointer.x,
+	                    top: pointer.y,
+	                    originX: 'left',
+	                    subTargetCheck: true,
+	                    hoverCursor: 'auto'
+	                }));
+
+	                _this2._line.start = _this2._start;
+	                _this2._line.end = _this2._end;
+	                _this2._line.text = _this2._text;
+	                _this2._start.line = _this2._line;
+	                _this2._end.line = _this2._line;
+	                _this2._text.line = _this2._line;
+
+	                canvas.add(_this2._text, _this2._line, _this2._start, _this2._end);
+
+	                canvas.on({
+	                    'mouse:move': _this2._listeners.mousemove,
+	                    'mouse:up': _this2._listeners.mouseup
+	                });
+	            });
+	        }
+
+	        /**
+	         * Mousemove event handler in fabric canvas
+	         * @param {{target: fabric.Object, e: MouseEvent}} fEvent - Fabric event object
+	         * @private
+	         */
+
+	    }, {
+	        key: '_onFabricMouseMove',
+	        value: function _onFabricMouseMove(fEvent) {
+	            var canvas = this.getCanvas();
+	            var pointer = canvas.getPointer(fEvent.e);
+	            var startPointer = {
+	                x: this._start.left,
+	                y: this._start.top
+	            };
+
+	            this._moveCircle(this._start, this._end, startPointer, pointer);
+	        }
+
+	        /**
+	         * Mouseup event handler in fabric canvas
+	         * @param {{target: fabric.Object, e: MouseEvent}} fEvent - Fabric event object
+	         * @private
+	         */
+
+	    }, {
+	        key: '_onFabricMouseUp',
+	        value: function _onFabricMouseUp() {
+	            var canvas = this.getCanvas();
+	            var param1 = this.graphics.createObjectProperties(this._line);
+	            var param2 = this.graphics.createObjectProperties(this._start);
+	            var param3 = this.graphics.createObjectProperties(this._end);
+	            var param4 = this.graphics.createObjectProperties(this._text);
+
+	            this.fire(eventNames.ADD_OBJECT, param1);
+	            this.fire(eventNames.ADD_OBJECT, param2);
+	            this.fire(eventNames.ADD_OBJECT, param3);
+	            this.fire(eventNames.ADD_OBJECT_AFTER, param4);
+
+	            var self = this;
+
+	            this._start.on({
+	                moving: function moving(fEvent) {
+	                    var pointer = canvas.getPointer(fEvent.e);
+	                    var target = fEvent.target;
+
+
+	                    var endPointer = {
+	                        x: target.line.end.left,
+	                        y: target.line.end.top
+	                    };
+
+	                    self._moveCircle(target, target.line.end, pointer, endPointer);
+	                }
+	            });
+	            this._end.on({
+	                moving: function moving(fEvent) {
+	                    var pointer = canvas.getPointer(fEvent.e);
+	                    var target = fEvent.target;
+
+	                    var startPointer = {
+	                        x: target.line.start.left,
+	                        y: target.line.start.top
+	                    };
+
+	                    self._moveCircle(target.line.start, target, startPointer, pointer);
+	                }
+	            });
+
+	            this._line.on({
+	                moving: function moving(fEvent) {
+	                    var line = fEvent.target;
+
+	                    var oldCenterX = (line.x1 + line.x2) / 2;
+	                    var oldCenterY = (line.y1 + line.y2) / 2;
+	                    var deltaX = line.left - oldCenterX;
+	                    var deltaY = line.top - oldCenterY;
+
+	                    var startPointer = {
+	                        x: line.x1 + deltaX,
+	                        y: line.y1 + deltaY
+	                    };
+	                    var endPointer = {
+	                        x: line.x2 + deltaX,
+	                        y: line.y2 + deltaY
+	                    };
+
+	                    self._moveCircle(line.start, line.end, startPointer, endPointer);
+	                },
+	                moved: function moved() {
+	                    canvas.discardActiveObject();
+	                    canvas.renderAll();
+	                }
+	            });
+
+	            this._text.on({
+	                mouseup: function mouseup(fEvent) {
+	                    var subTarget = fEvent.subTargets && fEvent.subTargets[0];
+	                    var target = fEvent.target;
+
+	                    if (subTarget && subTarget.type === 'measure_deleteIcon') {
+	                        canvas.remove(target.line.start, target.line.end, target.line.text, target.line);
+	                        canvas.renderAll();
+	                    }
+	                },
+	                mouseover: function mouseover(fEvent) {
+	                    var subTarget = fEvent.subTargets && fEvent.subTargets[0];
+	                    var target = fEvent.target;
+
+	                    var hoverCursor = 'auto';
+	                    if (subTarget && subTarget.type === 'measure_deleteIcon') {
+	                        hoverCursor = 'default';
+	                    }
+	                    target.set({
+	                        hoverCursor: hoverCursor
+	                    });
+	                    canvas.renderAll();
+	                },
+	                mousemove: function mousemove(fEvent) {
+	                    var subTarget = fEvent.subTargets && fEvent.subTargets[0];
+	                    var target = fEvent.target;
+
+
+	                    if (subTarget && subTarget.type === 'measure_deleteIcon') {
+	                        subTarget.item(0).set({
+	                            fill: '#00000061'
+	                        });
+	                    } else {
+	                        target.item(2).item(0).set({
+	                            fill: '#00000042'
+	                        });
+	                    }
+	                    canvas.renderAll();
+	                }
+	            });
+
+	            this._lines.push(this._line);
+	            this._line = null;
+	            this._start = null;
+	            this._end = null;
+	            this._text = null;
+
+	            canvas.off({
+	                'mouse:move': this._listeners.mousemove,
+	                'mouse:up': this._listeners.mouseup
+	            });
+
+	            this.end();
+	        }
+	    }, {
+	        key: '_moveCircle',
+	        value: function _moveCircle(start, end, startPoint, endPoint) {
+	            var canvas = this.getCanvas();
+	            var angle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x) * 180 / Math.PI;
+
+	            start.set({
+	                left: startPoint.x,
+	                top: startPoint.y,
+	                angle: angle - 90
+	            });
+
+	            end.set({
+	                left: endPoint.x,
+	                top: endPoint.y,
+	                angle: angle + 90
+	            });
+
+	            start.line.set({
+	                x1: startPoint.x,
+	                y1: startPoint.y,
+	                x2: endPoint.x,
+	                y2: endPoint.y,
+	                angle: 0
+	            });
+
+	            var _graphics$getMeasureB = this.graphics.getMeasureBaselinePoints(),
+	                length = _graphics$getMeasureB.length;
+
+	            var text = this.calcLineLength(length, startPoint, endPoint);
+
+	            start.line.text.set({
+	                left: endPoint.x + this._width * 2,
+	                top: endPoint.y
+	            });
+	            start.line.text.item(0).set({
+	                width: this._textWidth
+	            });
+	            start.line.text.item(1).set({
+	                text: text
+	            });
+
+	            start.setCoords();
+	            end.setCoords();
+	            start.line.setCoords();
+	            start.line.text.setCoords();
+	            canvas.renderAll();
+	        }
+	    }, {
+	        key: '_moveLine',
+	        value: function _moveLine(start, end, startPoint, endPoint) {
+	            var canvas = this.getCanvas();
+	            start.set({
+	                left: startPoint.x,
+	                top: startPoint.y
+	            });
+
+	            end.set({
+	                left: endPoint.x,
+	                top: endPoint.y
+	            });
+
+	            start.line.set({
+	                x1: startPoint.x,
+	                y1: startPoint.y,
+	                x2: endPoint.x,
+	                y2: endPoint.y
+	            });
+
+	            start.line.text.set({
+	                left: endPoint.x + this._width * 2,
+	                top: endPoint.y
+	            });
+
+	            start.setCoords();
+	            end.setCoords();
+	            start.line.setCoords();
+	            start.line.text.setCoords();
+	            canvas.renderAll();
+	        }
+	    }, {
+	        key: 'recalcMeasurelines',
+	        value: function recalcMeasurelines(baselineLength) {
+	            var _this3 = this;
+
+	            this._lines.forEach(function (line) {
+	                var x1 = line.x1,
+	                    x2 = line.x2,
+	                    y1 = line.y1,
+	                    y2 = line.y2;
+
+	                var text = _this3.calcLineLength(baselineLength, {
+	                    x: x1,
+	                    y: y1
+	                }, {
+	                    x: x2,
+	                    y: y2
+	                });
+
+	                line.text.item(1).set({
+	                    text: text
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'calcLineLength',
+	        value: function calcLineLength(baselineLength, start, end) {
+	            var lineLength = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2)) + this._width * 3;
+	            var text = (lineLength.toFixed(2) / baselineLength.toFixed(2) * 10).toFixed(2) + 'mm';
+
+	            return text;
+	        }
+	    }]);
+
+	    return MeasureLine;
+	}(_component2.default);
+
+	module.exports = MeasureLine;
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _drawingMode = __webpack_require__(130);
 
 	var _drawingMode2 = _interopRequireDefault(_drawingMode);
 
@@ -16830,7 +18030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CropperDrawingMode;
 
 /***/ }),
-/* 126 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16912,14 +18112,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DrawingMode;
 
 /***/ }),
-/* 127 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _drawingMode = __webpack_require__(126);
+	var _drawingMode = __webpack_require__(130);
 
 	var _drawingMode2 = _interopRequireDefault(_drawingMode);
 
@@ -16993,14 +18193,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FreeDrawingMode;
 
 /***/ }),
-/* 128 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _drawingMode = __webpack_require__(126);
+	var _drawingMode = __webpack_require__(130);
 
 	var _drawingMode2 = _interopRequireDefault(_drawingMode);
 
@@ -17074,14 +18274,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = LineDrawingMode;
 
 /***/ }),
-/* 129 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _drawingMode = __webpack_require__(126);
+	var _drawingMode = __webpack_require__(130);
 
 	var _drawingMode2 = _interopRequireDefault(_drawingMode);
 
@@ -17154,14 +18354,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ShapeDrawingMode;
 
 /***/ }),
-/* 130 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _drawingMode = __webpack_require__(126);
+	var _drawingMode = __webpack_require__(130);
 
 	var _drawingMode2 = _interopRequireDefault(_drawingMode);
 
@@ -17234,14 +18434,176 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TextDrawingMode;
 
 /***/ }),
-/* 131 */
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _drawingMode = __webpack_require__(130);
+
+	var _drawingMode2 = _interopRequireDefault(_drawingMode);
+
+	var _consts = __webpack_require__(73);
+
+	var _consts2 = _interopRequireDefault(_consts);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Team <dl_javascript@nhn.com>
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview MeasureBaseline drawing class
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var drawingModes = _consts2.default.drawingModes;
+
+	var components = _consts2.default.componentNames;
+
+	/**
+	 * MeasureBaselineMode class
+	 * @class
+	 * @ignore
+	 */
+
+	var MeasureBaseline = function (_DrawingMode) {
+	    _inherits(MeasureBaseline, _DrawingMode);
+
+	    function MeasureBaseline() {
+	        _classCallCheck(this, MeasureBaseline);
+
+	        return _possibleConstructorReturn(this, (MeasureBaseline.__proto__ || Object.getPrototypeOf(MeasureBaseline)).call(this, drawingModes.MEASURE_BASELINE));
+	    }
+
+	    /**
+	    * start this drawing mode
+	    * @param {Graphics} graphics - Graphics instance
+	    * @param {{width: ?number, color: ?string}} [options] - Brush width & color
+	    * @override
+	    */
+
+
+	    _createClass(MeasureBaseline, [{
+	        key: 'start',
+	        value: function start(graphics, options) {
+	            var lineDrawing = graphics.getComponent(components.MEASURE_BASELINE);
+	            lineDrawing.start(options);
+	        }
+
+	        /**
+	         * stop this drawing mode
+	         * @param {Graphics} graphics - Graphics instance
+	         * @override
+	         */
+
+	    }, {
+	        key: 'end',
+	        value: function end(graphics) {
+	            var lineDrawing = graphics.getComponent(components.MEASURE_BASELINE);
+	            lineDrawing.end();
+	        }
+	    }]);
+
+	    return MeasureBaseline;
+	}(_drawingMode2.default);
+
+	module.exports = MeasureBaseline;
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _drawingMode = __webpack_require__(130);
+
+	var _drawingMode2 = _interopRequireDefault(_drawingMode);
+
+	var _consts = __webpack_require__(73);
+
+	var _consts2 = _interopRequireDefault(_consts);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Team <dl_javascript@nhn.com>
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview LineDrawingMode class
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var drawingModes = _consts2.default.drawingModes;
+
+	var components = _consts2.default.componentNames;
+
+	/**
+	 * LineDrawingMode class
+	 * @class
+	 * @ignore
+	 */
+
+	var MeasureLine = function (_DrawingMode) {
+	    _inherits(MeasureLine, _DrawingMode);
+
+	    function MeasureLine() {
+	        _classCallCheck(this, MeasureLine);
+
+	        return _possibleConstructorReturn(this, (MeasureLine.__proto__ || Object.getPrototypeOf(MeasureLine)).call(this, drawingModes.MEASURE_LINE));
+	    }
+
+	    /**
+	    * start this drawing mode
+	    * @param {Graphics} graphics - Graphics instance
+	    * @param {{width: ?number, color: ?string}} [options] - Brush width & color
+	    * @override
+	    */
+
+
+	    _createClass(MeasureLine, [{
+	        key: 'start',
+	        value: function start(graphics, options) {
+	            var lineDrawing = graphics.getComponent(components.MEASURE_LINE);
+	            lineDrawing.start(options);
+	        }
+
+	        /**
+	         * stop this drawing mode
+	         * @param {Graphics} graphics - Graphics instance
+	         * @override
+	         */
+
+	    }, {
+	        key: 'end',
+	        value: function end(graphics) {
+	            var lineDrawing = graphics.getComponent(components.MEASURE_LINE);
+	            lineDrawing.end();
+	        }
+	    }]);
+
+	    return MeasureLine;
+	}(_drawingMode2.default);
+
+	module.exports = MeasureLine;
+
+/***/ }),
+/* 137 */
 /***/ (function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 132 */,
-/* 133 */
+/* 138 */,
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17310,7 +18672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 134 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17369,7 +18731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 135 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17436,7 +18798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 136 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17512,7 +18874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 137 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17587,7 +18949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 138 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17679,7 +19041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 139 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17758,7 +19120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 140 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17850,7 +19212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 141 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17923,7 +19285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 142 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18012,7 +19374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 143 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18070,7 +19432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 144 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18127,7 +19489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 145 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18215,7 +19577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 146 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18275,7 +19637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 147 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18338,7 +19700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 148 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18403,7 +19765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 149 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18472,7 +19834,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 150 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18559,7 +19921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = command;
 
 /***/ }),
-/* 151 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

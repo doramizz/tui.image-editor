@@ -19,7 +19,9 @@ module.exports = {
         'TEXT',
         'ICON',
         'FILTER',
-        'SHAPE'
+        'SHAPE',
+        'MEASURE_BASELINE',
+        'MEASURE_LINE'
     ),
 
     /**
@@ -36,6 +38,7 @@ module.exports = {
         'APPLY_FILTER': 'applyFilter',
         'REMOVE_FILTER': 'removeFilter',
         'ADD_ICON': 'addIcon',
+        'ADD_MEASURE_ICON': 'addMeasureIcon',
         'CHANGE_ICON_COLOR': 'changeIconColor',
         'ADD_SHAPE': 'addShape',
         'CHANGE_SHAPE': 'changeShape',
@@ -84,7 +87,9 @@ module.exports = {
         'FREE_DRAWING',
         'LINE_DRAWING',
         'TEXT',
-        'SHAPE'
+        'SHAPE',
+        'MEASURE_BASELINE',
+        'MEASURE_LINE'
     ),
 
     /**
@@ -107,10 +112,14 @@ module.exports = {
         SELECTION_STYLE: {
             borderColor: 'red',
             cornerColor: 'green',
-            cornerSize: 10,
+            cornerSize: 20,
             originX: 'center',
             originY: 'center',
-            transparentCorners: false
+            transparentCorners: false,
+            strokeUniform: true,
+            lockUniScaling: true,
+            centeredScaling: false,
+            centeredRotation: false
         }
     },
 

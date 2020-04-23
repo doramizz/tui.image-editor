@@ -318,7 +318,8 @@ body > textarea {
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-mask .tui-image-editor-submenu > div.tui-image-editor-menu-mask,
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-icon .tui-image-editor-submenu > div.tui-image-editor-menu-icon,
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-draw .tui-image-editor-submenu > div.tui-image-editor-menu-draw,
-.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-submenu > div.tui-image-editor-menu-filter {
+.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-submenu > div.tui-image-editor-menu-filter,
+.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-measure .tui-image-editor-submenu > div.tui-image-editor-menu-measure {
   display: table-cell;
 }
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-crop .tui-image-editor-submenu,
@@ -329,7 +330,8 @@ body > textarea {
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-mask .tui-image-editor-submenu,
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-icon .tui-image-editor-submenu,
 .tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-draw .tui-image-editor-submenu,
-.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-submenu {
+.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-filter .tui-image-editor-submenu,
+.tui-image-editor-container .tui-image-editor-main.tui-image-editor-menu-measure .tui-image-editor-submenu {
   display: table;
 }
 .tui-image-editor-container .filter-color-item {
@@ -876,6 +878,18 @@ body > textarea {
 }
 .tie-draw-line-select-button.line .tui-image-editor-button.line svg > use.active,
 .tie-draw-line-select-button.free .tui-image-editor-button.free svg > use.active {
+  display: block;
+}
+.tie-measure-baseline-button .tui-image-editor-button.selected svg > use.normal {
+  display: none;
+}
+.tie-measure-baseline-button .tui-image-editor-button.selected svg > use.active {
+  display: block;
+}
+.tie-measure-line-button .tui-image-editor-button.selected svg > use.normal {
+  display: none;
+}
+.tie-measure-line-button .tui-image-editor-button.selected svg > use.active {
   display: block;
 }
 .tie-flip-button.resetFlip .tui-image-editor-button.resetFlip svg > use.normal,

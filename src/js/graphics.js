@@ -15,11 +15,15 @@ import Text from './component/text';
 import Icon from './component/icon';
 import Filter from './component/filter';
 import Shape from './component/shape';
+import MeasureBaseline from './component/measureBaseline';
+import MeasureLine from './component/measureLine';
 import CropperDrawingMode from './drawingMode/cropper';
 import FreeDrawingMode from './drawingMode/freeDrawing';
 import LineDrawingMode from './drawingMode/lineDrawing';
 import ShapeDrawingMode from './drawingMode/shape';
 import TextDrawingMode from './drawingMode/text';
+import MeasureBaselineMode from './drawingMode/measureBaseline';
+import MeasureLineMode from './drawingMode/measureLine';
 import consts from './consts';
 import util from './util';
 
@@ -55,7 +59,8 @@ class Graphics {
         cssMaxWidth,
         cssMaxHeight,
         useItext = false,
-        useDragAddIcon = false
+        useDragAddIcon = false,
+        measureInitPosition
     } = {}) {
         /**
          * Fabric image instance
@@ -86,6 +91,8 @@ class Graphics {
          * @type {boolean}
          */
         this.useDragAddIcon = useDragAddIcon;
+
+        this.measureInitPosition = measureInitPosition;
 
         /**
          * cropper Selection Style
@@ -610,6 +617,23 @@ class Graphics {
         this.getComponent(components.SHAPE).setStates(type, options);
     }
 
+    setMeasureInit(baselinePoints) {
+        this.getComponent(components.MEASURE_BASELINE).setInit(baselinePoints);
+        this.getComponent(components.MEASURE_LINE).setInit();
+    }
+
+    setMeasureBaselineToggle(flag) {
+        this.getComponent(components.MEASURE_BASELINE).setVisible(flag);
+    }
+
+    getMeasureBaselinePoints() {
+        return this.getComponent(components.MEASURE_BASELINE).getBaseline();
+    }
+
+    recalcMeasurelines(length) {
+        this.getComponent(components.MEASURE_LINE).recalcMeasurelines(length);
+    }
+
     /**
      * Register icon paths
      * @param {Object} pathInfos - Path infos
@@ -814,6 +838,8 @@ class Graphics {
         this._register(this._drawingModeMap, new LineDrawingMode());
         this._register(this._drawingModeMap, new ShapeDrawingMode());
         this._register(this._drawingModeMap, new TextDrawingMode());
+        this._register(this._drawingModeMap, new MeasureBaselineMode());
+        this._register(this._drawingModeMap, new MeasureLineMode());
     }
 
     /**
@@ -831,6 +857,8 @@ class Graphics {
         this._register(this._componentMap, new Icon(this));
         this._register(this._componentMap, new Filter(this));
         this._register(this._componentMap, new Shape(this));
+        this._register(this._componentMap, new MeasureBaseline(this));
+        this._register(this._componentMap, new MeasureLine(this));
     }
 
     /**

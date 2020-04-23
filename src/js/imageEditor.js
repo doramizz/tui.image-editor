@@ -113,7 +113,8 @@ class ImageEditor {
                 cssMaxWidth: options.cssMaxWidth,
                 cssMaxHeight: options.cssMaxHeight,
                 useItext: !!this.ui,
-                useDragAddIcon: !!this.ui
+                useDragAddIcon: !!this.ui,
+                measureInitPosition: options.measureInitPosition
             }
         );
 
@@ -892,6 +893,15 @@ class ImageEditor {
      */
     setDrawingShape(type, options) {
         this._graphics.setDrawingShape(type, options);
+    }
+
+    setMeasureInit(baselinePoints) {
+        this._graphics.setMeasureInit(baselinePoints);
+        this.ui.measure.baselineButtonToggle(false);
+    }
+
+    setMeasureBaselineToggle(flag) {
+        this._graphics.setMeasureBaselineToggle(flag);
     }
 
     /**

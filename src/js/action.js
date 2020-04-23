@@ -20,7 +20,8 @@ export default {
             mask: this._maskAction(),
             draw: this._drawAction(),
             icon: this._iconAction(),
-            filter: this._filterAction()
+            filter: this._filterAction(),
+            measure: this._measureAction()
         };
     },
 
@@ -49,6 +50,10 @@ export default {
         const resetFilterValue = () => {
             this.ui.filter.resetRangeValue();
         };
+        const resetBaseline = () => {
+            this.setMeasureInit();
+            // this.ui.measure.baselineInitialized = false;
+        };
 
         return extend({
             initLoadImage: (imagePath, imageName) => (
@@ -74,6 +79,7 @@ export default {
             reset: () => {
                 exitCropOnAction();
                 resetFilterValue();
+                resetBaseline();
                 this.loadImageFromURL(this.ui.initializeImgUrl, 'resetImage').then(sizeValue => {
                     exitCropOnAction();
                     this.ui.resizeEditor({imageSize: sizeValue}).then(() => {
@@ -102,6 +108,7 @@ export default {
                 this.ui.initializeImgUrl = URL.createObjectURL(file);
                 this.loadImageFromFile(file).then(sizeValue => {
                     exitCropOnAction();
+                    // resetBaseline();
                     this.clearUndoStack();
                     this.ui.activeMenuEvent();
                     this.ui.resizeEditor({imageSize: sizeValue});
@@ -404,6 +411,27 @@ export default {
     },
 
     /**
+     * Measure Action
+     * @returns {Object} actions for ui measure
+     * @private
+     */
+    _measureAction() {
+        return extend({
+            setMeasureMode: (type, settings) => {
+                this.stopDrawingMode();
+                if (type === 'baseline') {
+                    this.startDrawingMode('MEASURE_BASELINE', settings);
+                } else {
+                    this.startDrawingMode('MEASURE_LINE', settings);
+                }
+            },
+            setMeasureBaselineToggle: (flag) => {
+                this.setMeasureBaselineToggle(flag);
+            }
+        }, this._commonAction());
+    },
+
+    /**
      * Image Editor Event Observer
      */
     setReAction() {
@@ -464,6 +492,10 @@ export default {
                         this.ui.changeMenu('icon', false, false);
                     }
                     this.ui.icon.setIconPickerColor(obj.fill);
+                } else if (obj.type.startsWith('measure')) {
+                    if (this.ui.submenu !== 'measure') {
+                        this.ui.changeMenu('measure', false, false);
+                    }
                 }
             },
             /* eslint-enable complexity */
@@ -483,6 +515,8 @@ export default {
                 if (['rect', 'circle', 'triangle'].indexOf(obj.type) > -1) {
                     this.ui.shape.setMaxStrokeValue(Math.min(obj.width, obj.height));
                     this.ui.shape.changeStandbyMode();
+                } else if (obj.type.startsWith('measure')) {
+                    this.ui.measure.changeStandbyModeLine();
                 }
             },
             objectScaled: obj => {
