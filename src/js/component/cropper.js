@@ -119,7 +119,7 @@ class Cropper extends Component {
             return;
         }
         canvas.remove(cropzone);
-        canvas.selection = true;
+        canvas.selection = false;
         canvas.defaultCursor = 'default';
         canvas.off('mouse:down', this._listeners.mousedown);
         canvas.forEachObject(obj => {
@@ -300,7 +300,7 @@ class Cropper extends Component {
         cropzone.set(presetRatio ? this._getPresetCropSizePosition(presetRatio) : DEFAULT_OPTION);
 
         canvas.add(cropzone);
-        canvas.selection = true;
+        canvas.selection = false;
 
         if (presetRatio) {
             canvas.setActiveObject(cropzone);

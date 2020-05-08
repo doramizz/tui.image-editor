@@ -57,6 +57,7 @@ class MeasureBaseline extends Component {
         if (this._initialized) {
             this.setVisible(true);
         } else {
+            this._initialized = true;
             this._createBaseline();
         }
     }
@@ -83,9 +84,9 @@ class MeasureBaseline extends Component {
         this._line.set({
             visible: flag
         });
-        this._text.set({
-            visible: flag
-        });
+        // this._text.set({
+        //     visible: flag
+        // });
         canvas.renderAll();
     }
 
@@ -94,6 +95,14 @@ class MeasureBaseline extends Component {
         const {width, height} = canvas;
         const xlen = 300;
         const ylen = 300;
+
+        if (this._initialized) {
+            if (this._initialPosition.width !== width ||
+                this._initialPosition.height !== height) {
+                this._initialPosition = {};
+            }
+        }
+
         const {x1 = (width / 2) - xlen,
             y1 = (height / 2) - ylen,
             x2 = (width / 2) + xlen,
@@ -165,7 +174,6 @@ class MeasureBaseline extends Component {
         this.fire(eventNames.ADD_OBJECT, param2);
         this.fire(eventNames.ADD_OBJECT, param3);
 
-        this._initialized = true;
         const self = this;
 
         this._start.on({
@@ -231,14 +239,24 @@ class MeasureBaseline extends Component {
     getBaseline() {
         const {x1, y1, x2, y2} = this._line;
         const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) + (this._width * 3);
+        const canvas = this.getCanvas();
+        const {width, height} = canvas;
 
-        return {
-            x1,
-            y1,
-            x2,
-            y2,
-            length
-        };
+        let ret = {};
+
+        if (this._initialized) {
+            ret = {
+                x1,
+                y1,
+                x2,
+                y2,
+                length,
+                width,
+                height
+            };
+        }
+
+        return ret;
     }
 
     _moveTriangle(start, end) {

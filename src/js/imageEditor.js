@@ -899,7 +899,7 @@ class ImageEditor {
 
     setMeasureInit(baselinePoints) {
         this._graphics.setMeasureInit(baselinePoints);
-        this.ui.measure.baselineButtonToggle(false);
+        this.ui.measure.measureButtonToggle(false);
     }
 
     setMeasureBaselineToggle(flag) {

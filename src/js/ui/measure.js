@@ -121,7 +121,7 @@ class Measure extends Submenu {
         }
     }
 
-    baselineButtonToggle(flag) {
+    measureButtonToggle(flag) {
         if (flag) {
             this._els.baselineButton.classList.add('selected');
             this._els.measureButton.classList.add('selected');

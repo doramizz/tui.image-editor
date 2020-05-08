@@ -131,7 +131,7 @@ class Shape extends Component {
 
         canvas.defaultCursor = 'default';
 
-        canvas.selection = true;
+        canvas.selection = false;
         canvas.uniScaleTransform = false;
         canvas.off({
             'mouse:down': this._handlers.mousedown

@@ -107,6 +107,7 @@ class MeasureLine extends Component {
     }
 
     setInit() {
+        this.end();
         this._lines = [];
     }
 
@@ -166,11 +167,11 @@ class MeasureLine extends Component {
             originY: 'center',
             rx: this._textPadding,
             ry: this._textPadding,
-            width: 0,
+            width: this._textWidth,
             height: this._textHeight + (this._textPadding * 2)
         });
 
-        const text = new fabric.Text('', {
+        const text = new fabric.Text('  0mm', {
             fontSize: this._textHeight,
             originY: 'center',
             fill: 'black',
@@ -180,11 +181,13 @@ class MeasureLine extends Component {
 
         this._icon.clone(cloned => {
             this._text = new fabric.Group([bg, text, cloned], extend(commOpts, {
-                left: pointer.x,
+                left: pointer.x + (this._width * 2),
                 top: pointer.y,
                 originX: 'left',
                 subTargetCheck: true,
-                hoverCursor: 'auto'
+                hoverCursor: 'auto',
+                lockMovementX: true,
+                lockMovementY: true
             }));
 
             this._line.start = this._start;
@@ -299,18 +302,18 @@ class MeasureLine extends Component {
                     canvas.renderAll();
                 }
             },
-            mouseover(fEvent) {
-                const subTarget = fEvent.subTargets && fEvent.subTargets[0];
-                const {target} = fEvent;
-                let hoverCursor = 'auto';
-                if (subTarget && subTarget.type === 'measure_deleteIcon') {
-                    hoverCursor = 'default';
-                }
-                target.set({
-                    hoverCursor
-                });
-                canvas.renderAll();
-            },
+            // mouseover(fEvent) {
+            //     const subTarget = fEvent.subTargets && fEvent.subTargets[0];
+            //     const {target} = fEvent;
+            //     let hoverCursor = 'auto';
+            //     if (subTarget && subTarget.type === 'measure_deleteIcon') {
+            //         hoverCursor = 'default';
+            //     }
+            //     target.set({
+            //         hoverCursor
+            //     });
+            //     canvas.renderAll();
+            // },
             mousemove(fEvent) {
                 const subTarget = fEvent.subTargets && fEvent.subTargets[0];
                 const {target} = fEvent;
@@ -373,9 +376,9 @@ class MeasureLine extends Component {
             left: endPoint.x + (this._width * 2),
             top: endPoint.y
         });
-        start.line.text.item(0).set({
-            width: this._textWidth
-        });
+        // start.line.text.item(0).set({
+        //     width: this._textWidth
+        // });
         start.line.text.item(1).set({
             text
         });

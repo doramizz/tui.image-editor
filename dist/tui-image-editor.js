@@ -1658,7 +1658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'setMeasureInit',
 	        value: function setMeasureInit(baselinePoints) {
 	            this._graphics.setMeasureInit(baselinePoints);
-	            this.ui.measure.baselineButtonToggle(false);
+	            this.ui.measure.measureButtonToggle(false);
 	        }
 	    }, {
 	        key: 'setMeasureBaselineToggle',
@@ -9304,8 +9304,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }, {
-	        key: 'baselineButtonToggle',
-	        value: function baselineButtonToggle(flag) {
+	        key: 'measureButtonToggle',
+	        value: function measureButtonToggle(flag) {
 	            if (flag) {
 	                this._els.baselineButton.classList.add('selected');
 	                this._els.measureButton.classList.add('selected');
@@ -13167,7 +13167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            canvas.remove(cropzone);
-	            canvas.selection = true;
+	            canvas.selection = false;
 	            canvas.defaultCursor = 'default';
 	            canvas.off('mouse:down', this._listeners.mousedown);
 	            canvas.forEachObject(function (obj) {
@@ -13372,7 +13372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            cropzone.set(presetRatio ? this._getPresetCropSizePosition(presetRatio) : DEFAULT_OPTION);
 
 	            canvas.add(cropzone);
-	            canvas.selection = true;
+	            canvas.selection = false;
 
 	            if (presetRatio) {
 	                canvas.setActiveObject(cropzone);
@@ -14544,7 +14544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var canvas = this.getCanvas();
 
 	            canvas.defaultCursor = 'default';
-	            canvas.selection = true;
+	            canvas.selection = false;
 
 	            canvas.forEachObject(function (obj) {
 	                obj.set({
@@ -14849,7 +14849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function end() {
 	            var canvas = this.getCanvas();
 
-	            canvas.selection = true;
+	            canvas.selection = false;
 	            canvas.defaultCursor = 'default';
 
 	            if (this.useItext) {
@@ -15579,7 +15579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    canvas.defaultCursor = 'default';
 	                    canvas.off('mouse:up');
 	                    canvas.off('mouse:move');
-	                    canvas.selection = true;
+	                    canvas.selection = false;
 	                }
 	            });
 	        }
@@ -16513,7 +16513,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            canvas.defaultCursor = 'default';
 
-	            canvas.selection = true;
+	            canvas.selection = false;
 	            canvas.uniScaleTransform = false;
 	            canvas.off({
 	                'mouse:down': this._handlers.mousedown
@@ -17210,6 +17210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this._initialized) {
 	                this.setVisible(true);
 	            } else {
+	                this._initialized = true;
 	                this._createBaseline();
 	            }
 	        }
@@ -17242,9 +17243,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._line.set({
 	                visible: flag
 	            });
-	            this._text.set({
-	                visible: flag
-	            });
+	            // this._text.set({
+	            //     visible: flag
+	            // });
 	            canvas.renderAll();
 	        }
 	    }, {
@@ -17256,6 +17257,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var xlen = 300;
 	            var ylen = 300;
+
+	            if (this._initialized) {
+	                if (this._initialPosition.width !== width || this._initialPosition.height !== height) {
+	                    this._initialPosition = {};
+	                }
+	            }
+
 	            var _initialPosition = this._initialPosition,
 	                _initialPosition$x = _initialPosition.x1,
 	                x1 = _initialPosition$x === undefined ? width / 2 - xlen : _initialPosition$x,
@@ -17334,7 +17342,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.fire(eventNames.ADD_OBJECT, param2);
 	            this.fire(eventNames.ADD_OBJECT, param3);
 
-	            this._initialized = true;
 	            var self = this;
 
 	            this._start.on({
@@ -17409,14 +17416,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	                y2 = _line.y2;
 
 	            var length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) + this._width * 3;
+	            var canvas = this.getCanvas();
+	            var width = canvas.width,
+	                height = canvas.height;
 
-	            return {
-	                x1: x1,
-	                y1: y1,
-	                x2: x2,
-	                y2: y2,
-	                length: length
-	            };
+
+	            var ret = {};
+
+	            if (this._initialized) {
+	                ret = {
+	                    x1: x1,
+	                    y1: y1,
+	                    x2: x2,
+	                    y2: y2,
+	                    length: length,
+	                    width: width,
+	                    height: height
+	                };
+	            }
+
+	            return ret;
 	        }
 	    }, {
 	        key: '_moveTriangle',
@@ -17601,6 +17620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'setInit',
 	        value: function setInit() {
+	            this.end();
 	            this._lines = [];
 	        }
 
@@ -17665,11 +17685,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                originY: 'center',
 	                rx: this._textPadding,
 	                ry: this._textPadding,
-	                width: 0,
+	                width: this._textWidth,
 	                height: this._textHeight + this._textPadding * 2
 	            });
 
-	            var text = new _fabric2.default.Text('', {
+	            var text = new _fabric2.default.Text('  0mm', {
 	                fontSize: this._textHeight,
 	                originY: 'center',
 	                fill: 'black',
@@ -17679,11 +17699,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this._icon.clone(function (cloned) {
 	                _this2._text = new _fabric2.default.Group([bg, text, cloned], (0, _tuiCodeSnippet.extend)(commOpts, {
-	                    left: pointer.x,
+	                    left: pointer.x + _this2._width * 2,
 	                    top: pointer.y,
 	                    originX: 'left',
 	                    subTargetCheck: true,
-	                    hoverCursor: 'auto'
+	                    hoverCursor: 'auto',
+	                    lockMovementX: true,
+	                    lockMovementY: true
 	                }));
 
 	                _this2._line.start = _this2._start;
@@ -17807,19 +17829,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        canvas.renderAll();
 	                    }
 	                },
-	                mouseover: function mouseover(fEvent) {
-	                    var subTarget = fEvent.subTargets && fEvent.subTargets[0];
-	                    var target = fEvent.target;
 
-	                    var hoverCursor = 'auto';
-	                    if (subTarget && subTarget.type === 'measure_deleteIcon') {
-	                        hoverCursor = 'default';
-	                    }
-	                    target.set({
-	                        hoverCursor: hoverCursor
-	                    });
-	                    canvas.renderAll();
-	                },
+	                // mouseover(fEvent) {
+	                //     const subTarget = fEvent.subTargets && fEvent.subTargets[0];
+	                //     const {target} = fEvent;
+	                //     let hoverCursor = 'auto';
+	                //     if (subTarget && subTarget.type === 'measure_deleteIcon') {
+	                //         hoverCursor = 'default';
+	                //     }
+	                //     target.set({
+	                //         hoverCursor
+	                //     });
+	                //     canvas.renderAll();
+	                // },
 	                mousemove: function mousemove(fEvent) {
 	                    var subTarget = fEvent.subTargets && fEvent.subTargets[0];
 	                    var target = fEvent.target;
@@ -17886,9 +17908,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                left: endPoint.x + this._width * 2,
 	                top: endPoint.y
 	            });
-	            start.line.text.item(0).set({
-	                width: this._textWidth
-	            });
+	            // start.line.text.item(0).set({
+	            //     width: this._textWidth
+	            // });
 	            start.line.text.item(1).set({
 	                text: text
 	            });
