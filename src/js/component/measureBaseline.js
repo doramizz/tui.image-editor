@@ -242,21 +242,15 @@ class MeasureBaseline extends Component {
         const canvas = this.getCanvas();
         const {width, height} = canvas;
 
-        let ret = {};
-
-        if (this._initialized) {
-            ret = {
-                x1,
-                y1,
-                x2,
-                y2,
-                length,
-                width,
-                height
-            };
-        }
-
-        return ret;
+        return {
+            x1,
+            y1,
+            x2,
+            y2,
+            length,
+            width,
+            height
+        };
     }
 
     _moveTriangle(start, end) {

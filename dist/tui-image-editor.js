@@ -17421,21 +17421,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                height = canvas.height;
 
 
-	            var ret = {};
-
-	            if (this._initialized) {
-	                ret = {
-	                    x1: x1,
-	                    y1: y1,
-	                    x2: x2,
-	                    y2: y2,
-	                    length: length,
-	                    width: width,
-	                    height: height
-	                };
-	            }
-
-	            return ret;
+	            return {
+	                x1: x1,
+	                y1: y1,
+	                x2: x2,
+	                y2: y2,
+	                length: length,
+	                width: width,
+	                height: height
+	            };
 	        }
 	    }, {
 	        key: '_moveTriangle',
