@@ -70,7 +70,10 @@ class Colorpicker {
      */
     _changeColorElement(color) {
         if (color) {
-            if (color !== 'transparent') {
+            if (color === 'transparent') {
+                this.colorElement.classList.add('transparent');
+            }
+            else {
                 this.colorElement.classList.remove('transparent');
             }
             this.colorElement.style.backgroundColor = color;
