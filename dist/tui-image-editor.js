@@ -6596,7 +6596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Colorpicker control class
 	 * @class
-	 * @ignore
+	 * @ignorea
 	 */
 
 	var Colorpicker = function () {
@@ -6644,7 +6644,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        value: function _changeColorElement(color) {
 	            if (color) {
-	                this.colorElement.classList.remove('transparent');
+	                if (color !== 'transparent') {
+	                    this.colorElement.classList.remove('transparent');
+	                }
 	                this.colorElement.style.backgroundColor = color;
 	            } else {
 	                this.colorElement.style.backgroundColor = '#fff';

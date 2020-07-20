@@ -22,7 +22,7 @@ const PICKER_COLOR = [
 /**
  * Colorpicker control class
  * @class
- * @ignore
+ * @ignorea
  */
 class Colorpicker {
     constructor(colorpickerElement, defaultColor = '#7e7e7e', toggleDirection = 'up', usageStatistics) {
@@ -70,7 +70,9 @@ class Colorpicker {
      */
     _changeColorElement(color) {
         if (color) {
-            this.colorElement.classList.remove('transparent');
+            if (color !== 'transparent') {
+                this.colorElement.classList.remove('transparent');
+            }
             this.colorElement.style.backgroundColor = color;
         } else {
             this.colorElement.style.backgroundColor = '#fff';
