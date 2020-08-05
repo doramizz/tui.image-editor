@@ -7,7 +7,7 @@
 export default ({locale, iconStyle: {normal, active}}) => (`
     <ul class="tui-image-editor-submenu-item">
         <li>
-            <div>1. Set a baseline(10mm)</div>
+            <div>1. ${locale.localize('image.editor.msg.measure1')}(10mm)</div>
             <div class="tie-measure-baseline-button">
                 <div class="tui-image-editor-button baseline">
                     <div>
@@ -26,7 +26,7 @@ export default ({locale, iconStyle: {normal, active}}) => (`
             <div></div>
         </li>
         <li>
-            <div>2. Measure the length with a line</div>
+            <div>2. ${locale.localize('image.editor.msg.measure2')}</div>
             <div class="tie-measure-line-button">
                 <div class="tui-image-editor-button line">
                     <div>
